@@ -1,10 +1,12 @@
 package test.task.stm.BuyTickets.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class User {
-    private long id;
+    private int id;
     private String login;
     private String password;
     private String first_name;

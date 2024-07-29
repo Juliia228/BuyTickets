@@ -1,12 +1,14 @@
 package test.task.stm.BuyTickets.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Route {
-    private long id;
+    private int id;
     private String from;
     private String to;
-    private int transporter_name;
+    private String transporter_name;
     private int minutes;
 }
