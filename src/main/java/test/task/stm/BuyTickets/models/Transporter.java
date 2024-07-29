@@ -1,11 +1,11 @@
-package test.task.stm.BuyTickets.model;
+package test.task.stm.BuyTickets.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Transporter {
-    private long id;
     private String name;
     private String phone;
-
 }
