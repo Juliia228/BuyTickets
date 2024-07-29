@@ -26,7 +26,7 @@ public class TransporterRepositoryImpl implements TransporterRepository {
         try {
             transporter = jdbcTemplate.queryForObject("select * from transporters where name = ?", new Object[]{name}, ROW_MAPPER);
         } catch (DataAccessException dataAccessException) {
-            log.debug("Couldn't find entity of type Person with name {}", name);
+            log.info("Couldn't find entity of type Transporter with name {}", name);
         }
         return transporter;
     }
@@ -36,13 +36,12 @@ public class TransporterRepositoryImpl implements TransporterRepository {
         return jdbcTemplate.query("select * from transporters", ROW_MAPPER);
     }
 
-
     @Override
     public Transporter save(Transporter transporter) {
         try {
-            assert jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Перевозчик " + transporter.getName() + " не добавлен");
+            jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone());
+        } catch (Exception e) {
+            log.info("Перевозчик " + transporter.getName() + " не добавлен");
         }
         return get(transporter.getName());
     }
@@ -50,9 +49,9 @@ public class TransporterRepositoryImpl implements TransporterRepository {
     @Override
     public Transporter update(Transporter transporter) {
         try {
-            assert jdbcTemplate.update("update transporters set phone = ? where name = ?", transporter.getPhone(), transporter.getName()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Данные о перевозчике " + transporter.getName() + " не обновлены");
+            jdbcTemplate.update("update transporters set phone = ? where name = ?", transporter.getPhone(), transporter.getName());
+        } catch (Exception e) {
+            log.info("Данные о перевозчике " + transporter.getName() + " не обновлены");
         }
         return get(transporter.getName());
     }

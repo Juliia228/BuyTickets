@@ -39,9 +39,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         try {
-            assert jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?)", user.getId(), user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Пользователь " + user.getId() + " не добавлен");
+            jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?)", user.getId(), user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic());
+        } catch (Exception e) {
+            log.info("Пользователь " + user.getId() + " не добавлен");
         }
         return get(user.getId());
     }
@@ -49,9 +49,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(User user) {
         try {
-            assert jdbcTemplate.update("update users set login = ?, password = ?, first_name = ?, last_name = ?, patronymic = ? where id = ?", user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic(), user.getId()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Данные о пользователе " + user.getId() + " не обновлены");
+            jdbcTemplate.update("update users set login = ?, password = ?, first_name = ?, last_name = ?, patronymic = ? where id = ?", user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic(), user.getId());
+        } catch (Exception e) {
+            log.info("Данные о пользователе " + user.getId() + " не обновлены");
         }
         return get(user.getId());
     }

@@ -26,7 +26,7 @@ public class RouteRepositoryImpl implements RouteRepository {
         try {
             route = jdbcTemplate.queryForObject("select * from routes where id = ?", new Object[]{id}, ROW_MAPPER);
         } catch (DataAccessException dataAccessException) {
-            log.debug("Couldn't find entity of type Route with id {}", id);
+            log.info("Couldn't find entity of type Route with id {}", id);
         }
         return route;
     }
@@ -39,9 +39,9 @@ public class RouteRepositoryImpl implements RouteRepository {
     @Override
     public Route save(Route route) {
         try {
-            assert jdbcTemplate.update("insert into routes values (?, ?, ?, ?, ?)", route.getId(), route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Маршрут " + route.getId() + " не добавлен");
+            jdbcTemplate.update("insert into routes values (?, ?, ?, ?, ?)", route.getId(), route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes());
+        } catch (Exception e) {
+            log.info("Маршрут " + route.getId() + " не добавлен");
         }
         return get(route.getId());
     }
@@ -49,8 +49,8 @@ public class RouteRepositoryImpl implements RouteRepository {
     @Override
     public Route update(Route route) {
         try {
-            assert jdbcTemplate.update("update routes set from = ?, to = ?, transporter_name = ?, minutes = ? where id = ?", route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes(), route.getId()) > 0;
-        } catch (AssertionError assertionError) {
+            jdbcTemplate.update("update routes set from = ?, to = ?, transporter_name = ?, minutes = ? where id = ?", route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes(), route.getId());
+        } catch (Exception e) {
             log.debug("Данные о маршруте " + route.getId() + " не обновлены");
         }
         return get(route.getId());

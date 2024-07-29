@@ -26,7 +26,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         try {
             ticket = jdbcTemplate.queryForObject("select * from tickets where id = ?", new Object[]{id}, ROW_MAPPER);
         } catch (DataAccessException dataAccessException) {
-            log.debug("Couldn't find entity of type Ticket with id {}", id);
+            log.info("Couldn't find entity of type Ticket with id {}", id);
         }
         return ticket;
     }
@@ -39,9 +39,9 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public Ticket save(Ticket ticket) {
         try {
-            assert jdbcTemplate.update("insert into tickets values (?, ?, ?, ?, ?)", ticket.getId(), ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Билет " + ticket.getId() + " не добавлен");
+            jdbcTemplate.update("insert into tickets values (?, ?, ?, ?, ?)", ticket.getId(), ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice());
+        } catch (Exception e) {
+            log.info("Билет " + ticket.getId() + " не добавлен");
         }
         return get(ticket.getId());
     }
@@ -49,8 +49,8 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public Ticket update(Ticket ticket) {
         try {
-            assert jdbcTemplate.update("update tickets set route_id = ?, departure_at = ?, seat_number = ?, price = ? where id = ?", ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice(), ticket.getId()) > 0;
-        } catch (AssertionError assertionError) {
+            jdbcTemplate.update("update tickets set route_id = ?, departure_at = ?, seat_number = ?, price = ? where id = ?", ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice(), ticket.getId());
+        } catch (Exception e) {
             log.debug("Данные о билете " + ticket.getId() + " не обновлены");
         }
         return get(ticket.getId());

@@ -26,7 +26,7 @@ public class SaleRepositoryImpl implements SaleRepository {
         try {
             sale = jdbcTemplate.queryForObject("select * from sales where id = ?", new Object[]{id}, ROW_MAPPER);
         } catch (DataAccessException dataAccessException) {
-            log.debug("Couldn't find entity of type Sale with id {}", id);
+            log.info("Couldn't find entity of type Sale with id {}", id);
         }
         return sale;
     }
@@ -39,9 +39,9 @@ public class SaleRepositoryImpl implements SaleRepository {
     @Override
     public Sale save(Sale sale) {
         try {
-            assert jdbcTemplate.update("insert into sales values (?, ?, ?, ?)", sale.getId(), sale.getUser_id(), sale.getTicket_id(), sale.getSold_at()) > 0;
-        } catch (AssertionError assertionError) {
-            log.debug("Продажа билета " + sale.getId() + " не добавлена");
+            jdbcTemplate.update("insert into sales values (?, ?, ?, ?)", sale.getId(), sale.getUser_id(), sale.getTicket_id(), sale.getSold_at());
+        } catch (Exception e) {
+            log.info("Продажа билета " + sale.getId() + " не добавлена");
         }
         return get(sale.getId());
     }
@@ -49,8 +49,8 @@ public class SaleRepositoryImpl implements SaleRepository {
     @Override
     public Sale update(Sale sale) {
         try {
-            assert jdbcTemplate.update("update sales set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", sale.getUser_id(), sale.getTicket_id(), sale.getSold_at(), sale.getId()) > 0;
-        } catch (AssertionError assertionError) {
+            jdbcTemplate.update("update sales set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", sale.getUser_id(), sale.getTicket_id(), sale.getSold_at(), sale.getId());
+        } catch (Exception e) {
             log.debug("Данные о продаже " + sale.getId() + " не обновлены");
         }
         return get(sale.getId());
