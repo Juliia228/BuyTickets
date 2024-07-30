@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User get(int id) {
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject("select * from users where id = ?", new Object[]{id}, ROW_MAPPER);
+            user = jdbcTemplate.queryForObject("select * from users where id = ?", ROW_MAPPER, id);
         } catch (DataAccessException dataAccessException) {
             log.info("Couldn't find entity of type User with id {}", id);
         }

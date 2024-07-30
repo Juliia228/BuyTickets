@@ -24,7 +24,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     public Sale get(int id) {
         Sale sale = null;
         try {
-            sale = jdbcTemplate.queryForObject("select * from sales where id = ?", new Object[]{id}, ROW_MAPPER);
+            sale = jdbcTemplate.queryForObject("select * from sales where id = ?", ROW_MAPPER, id);
         } catch (DataAccessException dataAccessException) {
             log.info("Couldn't find entity of type Sale with id {}", id);
         }

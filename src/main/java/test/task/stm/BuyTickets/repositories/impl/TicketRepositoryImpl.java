@@ -24,7 +24,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     public Ticket get(int id) {
         Ticket ticket = null;
         try {
-            ticket = jdbcTemplate.queryForObject("select * from tickets where id = ?", new Object[]{id}, ROW_MAPPER);
+            ticket = jdbcTemplate.queryForObject("select * from tickets where id = ?", ROW_MAPPER, id);
         } catch (DataAccessException dataAccessException) {
             log.info("Couldn't find entity of type Ticket with id {}", id);
         }

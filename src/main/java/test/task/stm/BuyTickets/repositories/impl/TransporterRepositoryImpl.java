@@ -24,7 +24,7 @@ public class TransporterRepositoryImpl implements TransporterRepository {
     public Transporter get(String name) {
         Transporter transporter = null;
         try {
-            transporter = jdbcTemplate.queryForObject("select * from transporters where name = ?", new Object[]{name}, ROW_MAPPER);
+            transporter = jdbcTemplate.queryForObject("select * from transporters where name = ?", ROW_MAPPER, name);
         } catch (DataAccessException dataAccessException) {
             log.info("Couldn't find entity of type Transporter with name {}", name);
         }
