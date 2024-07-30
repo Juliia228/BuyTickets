@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Sale;
 import test.task.stm.BuyTickets.repositories.SaleRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -39,11 +42,23 @@ public class SaleRepositoryImpl implements SaleRepository {
     @Override
     public Sale save(Sale sale) {
         try {
-            jdbcTemplate.update("insert into sales values (?, ?, ?, ?)", sale.getId(), sale.getUser_id(), sale.getTicket_id(), sale.getSold_at());
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection
+                        .prepareStatement("insert into sales (user_id, ticket_id, sold_at) values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, sale.getUser_id());
+                ps.setInt(2, sale.getTicket_id());
+                ps.setTimestamp(3, sale.getSold_at());
+                return ps;
+            }, generatedKeyHolder);
+            if (generatedKeyHolder.getKeys() == null) {
+                throw new RuntimeException();
+            }
+            return get((Integer) generatedKeyHolder.getKeys().get("id"));
         } catch (Exception e) {
             log.info("Продажа билета " + sale.getId() + " не добавлена");
+            return null;
         }
-        return get(sale.getId());
     }
 
     @Override

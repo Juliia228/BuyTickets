@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Route;
 import test.task.stm.BuyTickets.repositories.RouteRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -24,7 +27,7 @@ public class RouteRepositoryImpl implements RouteRepository {
     public Route get(int id) {
         Route route = null;
         try {
-            route = jdbcTemplate.queryForObject("select * from routes where id = ?", new Object[]{id}, ROW_MAPPER);
+            route = jdbcTemplate.queryForObject("select * from routes where id = ?", ROW_MAPPER, id);
         } catch (DataAccessException dataAccessException) {
             log.info("Couldn't find entity of type Route with id {}", id);
         }
@@ -39,11 +42,24 @@ public class RouteRepositoryImpl implements RouteRepository {
     @Override
     public Route save(Route route) {
         try {
-            jdbcTemplate.update("insert into routes values (?, ?, ?, ?, ?)", route.getId(), route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes());
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection
+                        .prepareStatement("insert into routes (from, to, transporter_name, minutes) values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, route.getFrom());
+                ps.setString(2, route.getTo());
+                ps.setString(3, route.getTransporter_name());
+                ps.setInt(4, route.getMinutes());
+                return ps;
+            }, generatedKeyHolder);
+            if (generatedKeyHolder.getKeys() == null) {
+                throw new RuntimeException();
+            }
+            return get((Integer) generatedKeyHolder.getKeys().get("id"));
         } catch (Exception e) {
             log.info("Маршрут " + route.getId() + " не добавлен");
+            return null;
         }
-        return get(route.getId());
     }
 
     @Override

@@ -40,10 +40,11 @@ public class TransporterRepositoryImpl implements TransporterRepository {
     public Transporter save(Transporter transporter) {
         try {
             jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone());
+            return get(transporter.getName());
         } catch (Exception e) {
             log.info("Перевозчик " + transporter.getName() + " не добавлен");
+            return null;
         }
-        return get(transporter.getName());
     }
 
     @Override

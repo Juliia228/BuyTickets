@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.User;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -38,12 +41,26 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         try {
-            jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?)", user.getId(), user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic());
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection
+                        .prepareStatement("insert into users (login, password, first_name, last_name, patronymic) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, user.getLogin());
+                ps.setString(2, user.getPassword());
+                ps.setString(3, user.getFirst_name());
+                ps.setString(4, user.getLast_name());
+                ps.setString(5, user.getPatronymic());
+                return ps;
+            }, generatedKeyHolder);
+            if (generatedKeyHolder.getKeys() == null) {
+                throw new RuntimeException();
+            }
+            return get((Integer) generatedKeyHolder.getKeys().get("id"));
         } catch (Exception e) {
             log.info("Пользователь " + user.getId() + " не добавлен");
+            return null;
         }
-        return get(user.getId());
     }
 
     @Override
