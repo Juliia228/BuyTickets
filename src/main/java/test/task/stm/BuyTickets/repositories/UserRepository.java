@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public interface UserRepository {
-    RowMapper<User> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new User(resultSet.getInt("id"), resultSet.getString("login"), resultSet.getString("password"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("patronymic"));
+    RowMapper<User> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new User(resultSet.getInt("id"), resultSet.getString("login"), resultSet.getString("password"), resultSet.getString("last_name"), resultSet.getString("first_name"), resultSet.getString("patronymic"));
 
     User get(int id);
 
