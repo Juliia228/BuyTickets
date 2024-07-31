@@ -1,13 +1,16 @@
 package test.task.stm.BuyTickets.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -41,7 +44,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleDataNotFoundException(DataNotFoundException dataNotFoundException, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + dataNotFoundException);
         ErrorResponse errorResponse = new ErrorResponse("Данные не найдены", dataNotFoundException.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(404).body(errorResponse);
     }
 
     @ExceptionHandler(RegistrationException.class)
@@ -62,6 +65,27 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException badRequestException, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + badRequestException);
         ErrorResponse errorResponse = new ErrorResponse("Невозможно выполнить запрос", badRequestException.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Неверные параметры запроса", exception.getCause().getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getBody().getDetail());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
 }

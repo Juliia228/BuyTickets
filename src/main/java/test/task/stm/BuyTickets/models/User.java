@@ -1,5 +1,8 @@
 package test.task.stm.BuyTickets.models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     private int id;
+    @Email
     private String login;
+    @Pattern(regexp = "/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g")
     private String password;
+    @NotBlank
     private String last_name;
+    @NotBlank
     private String first_name;
     private String patronymic;
     //private Role role;
