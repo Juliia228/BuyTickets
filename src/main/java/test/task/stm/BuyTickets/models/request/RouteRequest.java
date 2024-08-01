@@ -3,6 +3,7 @@ package test.task.stm.BuyTickets.models.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,7 @@ public class RouteRequest {
     @NotBlank(message = "transporter name is required")
     private String transporter_name;
     @Schema(description = "Длительность поездка (в минутах)")
-    @Min(value = 1, message = "trip cannot last less than 1 minute")
+    @Min(value = 1, message = "route cannot last less than 1 minute")
+    @NotNull
     private int minutes;
 }
