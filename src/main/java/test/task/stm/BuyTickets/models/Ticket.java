@@ -16,9 +16,9 @@ public class Ticket {
     private int id;
     @Min(value = 1)
     private int route_id;
-    @NotNull
+    @NotNull(message = "departure date is required")
     private Timestamp departure_at;
-    @Min(value = 1)
+    @Min(value = 1, message = "seat number cannot be less than 1")
     private int seat_number;
     private long price;
 
