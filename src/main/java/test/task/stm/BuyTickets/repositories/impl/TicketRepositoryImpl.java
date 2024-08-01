@@ -34,6 +34,17 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public List<Ticket> getByUser(int user_id) {
+        return jdbcTemplate.query("select tickets.* from tickets " +
+                        "join sales " +
+                        "on sales.ticket_id = tickets.id " +
+                        "join users " +
+                        "on users.id = sales.user_id " +
+                        "and users.id = ?",
+                ROW_MAPPER, user_id);
+    }
+
+    @Override
     public List<Ticket> getByDateTime(Timestamp from, Timestamp to) {
         return jdbcTemplate.query("select * from tickets " +
                 "where departure_at between ? and ? " +

@@ -32,10 +32,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User registerNewUser(UserRequest new_user) {
-        return userRepository.save(new_user);
-    }
-
     public User edit(User new_user) {
         return userRepository.update(new_user);
     }

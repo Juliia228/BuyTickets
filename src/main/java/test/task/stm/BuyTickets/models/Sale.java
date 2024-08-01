@@ -1,5 +1,6 @@
 package test.task.stm.BuyTickets.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +11,17 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Сущность осуществленных продаж")
 public class Sale {
+    @Schema(description = "Идентификатор")
     @Min(value = 1)
     private int id;
+    @Schema(description = "Идентификатор пользователя, который купил билет")
     @Min(value = 1)
     private int user_id;
+    @Schema(description = "Идентификатор купленного билета")
     @Min(value = 1)
     private int ticket_id;
+    @Schema(description = "Дата и время продажи")
     private Timestamp sold_at;
 }

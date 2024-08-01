@@ -14,6 +14,8 @@ public interface TicketRepository {
 
     Ticket get(int id);
 
+    List<Ticket> getByUser(int user_id);
+
     List<Ticket> getByDateTime(Timestamp from, Timestamp to);
 
     List<Ticket> getByDateTime(Integer offset, Integer size, Timestamp from, Timestamp to);

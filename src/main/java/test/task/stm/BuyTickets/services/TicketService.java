@@ -22,6 +22,10 @@ public class TicketService {
         return ticketRepository.get(id);
     }
 
+    public List<Ticket> findByUser(int user_id) {
+        return ticketRepository.getByUser(user_id);
+    }
+
     public List<Ticket> find(Integer offset, Integer size, Timestamp from, Timestamp to) {
         return (offset != null && size != null)
                 ? ticketRepository.getByDateTime(offset, size, from, to)
