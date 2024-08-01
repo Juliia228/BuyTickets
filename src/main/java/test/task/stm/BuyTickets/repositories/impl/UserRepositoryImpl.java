@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -25,13 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        User user = null;
-        try {
-            user = jdbcTemplate.queryForObject("select * from users where id = ?", ROW_MAPPER, id);
-        } catch (DataAccessException dataAccessException) {
-            log.info("Couldn't find entity of type User with id {}", id);
-        }
-        return user;
+        return jdbcTemplate.queryForObject("select * from users where id = ?", ROW_MAPPER, id);
     }
 
     @Override
@@ -42,31 +36,26 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        try {
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection
-                        .prepareStatement("insert into users (login, password, first_name, last_name, patronymic) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, user.getLogin());
-                ps.setString(2, user.getPassword());
-                ps.setString(3, user.getFirst_name());
-                ps.setString(4, user.getLast_name());
-                ps.setString(5, user.getPatronymic());
-                return ps;
-            }, generatedKeyHolder);
-            if (generatedKeyHolder.getKeys() == null) {
-                throw new RuntimeException();
-            }
-            return get((Integer) generatedKeyHolder.getKeys().get("id"));
-        } catch (Exception e) {
-            log.info("Пользователь " + user.getId() + " не добавлен");
-            return null;
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement("insert into users (login, password, last_name, first_name, patronymic) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getLogin());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getLast_name());
+            ps.setString(4, user.getFirst_name());
+            ps.setString(5, user.getPatronymic());
+            return ps;
+        }, generatedKeyHolder);
+        if (generatedKeyHolder.getKeys() == null) {
+            throw new InvalidDataAccessApiUsageException("User object cannot be saved");
         }
+        return get((Integer) generatedKeyHolder.getKeys().get("id"));
     }
 
     @Override
     public User update(User user) {
         try {
-            jdbcTemplate.update("update users set login = ?, password = ?, first_name = ?, last_name = ?, patronymic = ? where id = ?", user.getLogin(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPatronymic(), user.getId());
+            jdbcTemplate.update("update users set login = ?, password = ?, last_name = ?, first_name = ?, patronymic = ? where id = ?", user.getLogin(), user.getPassword(), user.getLast_name(), user.getFirst_name(), user.getPatronymic(), user.getId());
         } catch (Exception e) {
             log.info("Данные о пользователе " + user.getId() + " не обновлены");
         }

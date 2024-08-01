@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -25,13 +25,7 @@ public class RouteRepositoryImpl implements RouteRepository {
 
     @Override
     public Route get(int id) {
-        Route route = null;
-        try {
-            route = jdbcTemplate.queryForObject("select * from routes where id = ?", ROW_MAPPER, id);
-        } catch (DataAccessException dataAccessException) {
-            log.info("Couldn't find entity of type Route with id {}", id);
-        }
-        return route;
+        return jdbcTemplate.queryForObject("select * from routes where id = ?", ROW_MAPPER, id);
     }
 
     @Override
@@ -41,34 +35,25 @@ public class RouteRepositoryImpl implements RouteRepository {
 
     @Override
     public Route save(Route route) {
-        try {
-            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection
-                        .prepareStatement("insert into routes (from, to, transporter_name, minutes) values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, route.getFrom());
-                ps.setString(2, route.getTo());
-                ps.setString(3, route.getTransporter_name());
-                ps.setInt(4, route.getMinutes());
-                return ps;
-            }, generatedKeyHolder);
-            if (generatedKeyHolder.getKeys() == null) {
-                throw new RuntimeException();
-            }
-            return get((Integer) generatedKeyHolder.getKeys().get("id"));
-        } catch (Exception e) {
-            log.info("Маршрут " + route.getId() + " не добавлен");
-            return null;
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement("insert into routes (departure_point, destination_point, transporter_name, minutes) values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, route.getDeparture_point());
+            ps.setString(2, route.getDestination_point());
+            ps.setString(3, route.getTransporter_name());
+            ps.setInt(4, route.getMinutes());
+            return ps;
+        }, generatedKeyHolder);
+        if (generatedKeyHolder.getKeys() == null) {
+            throw new InvalidDataAccessApiUsageException("Route object cannot be saved");
         }
+        return get((Integer) generatedKeyHolder.getKeys().get("id"));
     }
 
     @Override
     public Route update(Route route) {
-        try {
-            jdbcTemplate.update("update routes set from = ?, to = ?, transporter_name = ?, minutes = ? where id = ?", route.getFrom(), route.getTo(), route.getTransporter_name(), route.getMinutes(), route.getId());
-        } catch (Exception e) {
-            log.debug("Данные о маршруте " + route.getId() + " не обновлены");
-        }
+        jdbcTemplate.update("update routes set departure_point = ?, destination_point = ?, transporter_name = ?, minutes = ? where id = ?", route.getDeparture_point(), route.getDestination_point(), route.getTransporter_name(), route.getMinutes(), route.getId());
         return get(route.getId());
     }
 

@@ -2,7 +2,6 @@ package test.task.stm.BuyTickets.repositories.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Transporter;
@@ -22,13 +21,7 @@ public class TransporterRepositoryImpl implements TransporterRepository {
 
     @Override
     public Transporter get(String name) {
-        Transporter transporter = null;
-        try {
-            transporter = jdbcTemplate.queryForObject("select * from transporters where name = ?", ROW_MAPPER, name);
-        } catch (DataAccessException dataAccessException) {
-            log.info("Couldn't find entity of type Transporter with name {}", name);
-        }
-        return transporter;
+        return jdbcTemplate.queryForObject("select * from transporters where name = ?", ROW_MAPPER, name);
     }
 
     @Override
@@ -38,22 +31,13 @@ public class TransporterRepositoryImpl implements TransporterRepository {
 
     @Override
     public Transporter save(Transporter transporter) {
-        try {
-            jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone());
-            return get(transporter.getName());
-        } catch (Exception e) {
-            log.info("Перевозчик " + transporter.getName() + " не добавлен");
-            return null;
-        }
+        jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone());
+        return get(transporter.getName());
     }
 
     @Override
     public Transporter update(Transporter transporter) {
-        try {
-            jdbcTemplate.update("update transporters set phone = ? where name = ?", transporter.getPhone(), transporter.getName());
-        } catch (Exception e) {
-            log.info("Данные о перевозчике " + transporter.getName() + " не обновлены");
-        }
+        jdbcTemplate.update("update transporters set phone = ? where name = ?", transporter.getPhone(), transporter.getName());
         return get(transporter.getName());
     }
 

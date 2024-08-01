@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -25,13 +25,7 @@ public class SaleRepositoryImpl implements SaleRepository {
 
     @Override
     public Sale get(int id) {
-        Sale sale = null;
-        try {
-            sale = jdbcTemplate.queryForObject("select * from sales where id = ?", ROW_MAPPER, id);
-        } catch (DataAccessException dataAccessException) {
-            log.info("Couldn't find entity of type Sale with id {}", id);
-        }
-        return sale;
+        return jdbcTemplate.queryForObject("select * from sales where id = ?", ROW_MAPPER, id);
     }
 
     @Override
@@ -41,24 +35,19 @@ public class SaleRepositoryImpl implements SaleRepository {
 
     @Override
     public Sale save(Sale sale) {
-        try {
-            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection
-                        .prepareStatement("insert into sales (user_id, ticket_id, sold_at) values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, sale.getUser_id());
-                ps.setInt(2, sale.getTicket_id());
-                ps.setTimestamp(3, sale.getSold_at());
-                return ps;
-            }, generatedKeyHolder);
-            if (generatedKeyHolder.getKeys() == null) {
-                throw new RuntimeException();
-            }
-            return get((Integer) generatedKeyHolder.getKeys().get("id"));
-        } catch (Exception e) {
-            log.info("Продажа билета " + sale.getId() + " не добавлена");
-            return null;
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement("insert into sales (user_id, ticket_id, sold_at) values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, sale.getUser_id());
+            ps.setInt(2, sale.getTicket_id());
+            ps.setTimestamp(3, sale.getSold_at());
+            return ps;
+        }, generatedKeyHolder);
+        if (generatedKeyHolder.getKeys() == null) {
+            throw new InvalidDataAccessApiUsageException("Sale object cannot be saved");
         }
+        return get((Integer) generatedKeyHolder.getKeys().get("id"));
     }
 
     @Override
