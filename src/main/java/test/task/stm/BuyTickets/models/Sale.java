@@ -17,7 +17,6 @@ public class Sale {
     private int user_id;
     @Min(value = 1)
     private int ticket_id;
-    @PastOrPresent
     private Timestamp sold_at;
 
     public Sale(int user_id, int ticket_id, Timestamp sold_at) {
