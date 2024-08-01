@@ -1,18 +1,24 @@
 package test.task.stm.BuyTickets.controllers;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Ticket;
 import test.task.stm.BuyTickets.services.TicketService;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
-@RestController("/ticket")
+@Validated
+@RestController
+@RequestMapping("/ticket")
 public class TicketController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -23,7 +29,7 @@ public class TicketController {
     }
 
     @GetMapping("/getById")
-    public ResponseEntity<Ticket> getTicket(@RequestParam int id) {
+    public ResponseEntity<Ticket> getTicket(@RequestParam @Min(1) int id) {
         return ResponseEntity.ok(ticketService.find(id));
     }
 
@@ -74,13 +80,13 @@ public class TicketController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Ticket> newTicket(@RequestBody Ticket new_ticket) {
+    public ResponseEntity<Ticket> newTicket(@Valid @RequestBody Ticket new_ticket) {
         // id необязательный параметр
         return ResponseEntity.ok(ticketService.add(new_ticket));
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket new_ticket) {
+    public ResponseEntity<Ticket> updateTicket(@Valid @RequestBody Ticket new_ticket) {
         // id обязательный параметр
         return ResponseEntity.ok(ticketService.edit(new_ticket));
     }
