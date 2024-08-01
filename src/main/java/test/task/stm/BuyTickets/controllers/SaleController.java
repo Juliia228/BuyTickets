@@ -47,8 +47,9 @@ public class SaleController {
         return ResponseEntity.ok(saleService.edit(new_sale));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Sale> deleteSale(@RequestParam int id) {
-        return ResponseEntity.ok(saleService.delete(id));
+    @DeleteMapping("/sale/delete")
+    public ResponseEntity<String> deleteSale(@RequestParam @Min(1) int id) {
+        saleService.delete(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }

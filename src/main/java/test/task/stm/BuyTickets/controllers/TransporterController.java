@@ -46,7 +46,8 @@ public class TransporterController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Transporter> deleteTransporter(@RequestParam int id) {
-        return ResponseEntity.ok(transporterService.delete(id));
+    public ResponseEntity<String> deleteTransporter(@RequestParam @NotBlank String name) {
+        transporterService.delete(name);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }

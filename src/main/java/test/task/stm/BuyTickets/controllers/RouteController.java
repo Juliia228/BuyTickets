@@ -46,15 +46,9 @@ public class RouteController {
         return ResponseEntity.ok(routeService.edit(new_route));
     }
 
-//    @PutMapping("/edit")
-//    public ResponseEntity<Route> updateRoute(@RequestParam int id, @RequestBody Route new_route) {
-//        // id обязательный параметр
-//        new_route.setId(id);
-//        return ResponseEntity.ok(routeService.edit(new_route));
-//    }
-
     @DeleteMapping("/delete")
-    public ResponseEntity<Route> deleteRoute(@RequestParam int id) {
-        return ResponseEntity.ok(routeService.delete(id));
+    public ResponseEntity<String> deleteRoute(@RequestParam @Min(1) int id) {
+        routeService.delete(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }

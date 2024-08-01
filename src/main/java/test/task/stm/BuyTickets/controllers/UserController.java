@@ -2,7 +2,6 @@ package test.task.stm.BuyTickets.controllers;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +60,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<User> deleteUser(@RequestParam int id) {
-        return ResponseEntity.ok(userService.delete(id));
+    public ResponseEntity<String> deleteUser(@RequestParam @Min(1) int id) {
+        userService.delete(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }

@@ -92,7 +92,8 @@ public class TicketController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Ticket> deleteTicket(@RequestParam int id) {
-        return ResponseEntity.ok(ticketService.delete(id));
+    public ResponseEntity<String> deleteTicket(@RequestParam @Min(1) int id) {
+        ticketService.delete(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }
