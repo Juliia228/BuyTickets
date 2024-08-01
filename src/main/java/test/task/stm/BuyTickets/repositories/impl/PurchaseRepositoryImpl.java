@@ -6,36 +6,36 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import test.task.stm.BuyTickets.models.Sale;
-import test.task.stm.BuyTickets.models.request.SaleRequest;
-import test.task.stm.BuyTickets.repositories.SaleRepository;
+import test.task.stm.BuyTickets.models.Purchase;
+import test.task.stm.BuyTickets.models.request.PurchaseRequest;
+import test.task.stm.BuyTickets.repositories.PurchaseRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class SaleRepositoryImpl implements SaleRepository {
+public class PurchaseRepositoryImpl implements PurchaseRepository {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final JdbcTemplate jdbcTemplate;
 
-    public SaleRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public PurchaseRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Sale get(int id) {
+    public Purchase get(int id) {
         return jdbcTemplate.queryForObject("select * from sales where id = ?", ROW_MAPPER, id);
     }
 
     @Override
-    public List<Sale> getAll() {
+    public List<Purchase> getAll() {
         return jdbcTemplate.query("select * from sales", ROW_MAPPER);
     }
 
     @Override
-    public Sale save(SaleRequest sale) {
+    public Purchase save(PurchaseRequest sale) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
@@ -46,19 +46,19 @@ public class SaleRepositoryImpl implements SaleRepository {
             return ps;
         }, generatedKeyHolder);
         if (generatedKeyHolder.getKeys() == null) {
-            throw new InvalidDataAccessApiUsageException("Sale object cannot be saved");
+            throw new InvalidDataAccessApiUsageException("Purchase object cannot be saved");
         }
         return get((Integer) generatedKeyHolder.getKeys().get("id"));
     }
 
     @Override
-    public Sale update(Sale sale) {
+    public Purchase update(Purchase purchase) {
         try {
-            jdbcTemplate.update("update sales set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", sale.getUser_id(), sale.getTicket_id(), sale.getSold_at(), sale.getId());
+            jdbcTemplate.update("update sales set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", purchase.getUser_id(), purchase.getTicket_id(), purchase.getSold_at(), purchase.getId());
         } catch (Exception e) {
-            log.debug("Данные о продаже " + sale.getId() + " не обновлены");
+            log.debug("Данные о продаже " + purchase.getId() + " не обновлены");
         }
-        return get(sale.getId());
+        return get(purchase.getId());
     }
 
     @Override

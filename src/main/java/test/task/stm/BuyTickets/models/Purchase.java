@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Сущность осуществленных продаж")
-public class Sale {
+@Schema(description = "Сущность осуществленных покупок")
+public class Purchase {
     @Schema(description = "Идентификатор")
     @Min(value = 1)
     private int id;
@@ -22,6 +22,6 @@ public class Sale {
     @Schema(description = "Идентификатор купленного билета")
     @Min(value = 1)
     private int ticket_id;
-    @Schema(description = "Дата и время продажи")
+    @Schema(description = "Дата и время покупки")
     private Timestamp sold_at;
 }
