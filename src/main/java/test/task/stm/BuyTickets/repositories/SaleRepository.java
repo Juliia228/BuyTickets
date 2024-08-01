@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.Sale;
-import test.task.stm.BuyTickets.models.SaleRequest;
+import test.task.stm.BuyTickets.models.request.SaleRequest;
 
 import java.sql.ResultSet;
 import java.util.List;

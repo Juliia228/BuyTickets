@@ -3,7 +3,7 @@ package test.task.stm.BuyTickets.services;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.User;
-import test.task.stm.BuyTickets.models.UserRequest;
+import test.task.stm.BuyTickets.models.request.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
 import java.util.List;

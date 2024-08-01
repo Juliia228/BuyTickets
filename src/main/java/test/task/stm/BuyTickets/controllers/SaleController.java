@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import test.task.stm.BuyTickets.models.BuyTicketRequest;
+import test.task.stm.BuyTickets.models.request.BuyTicketRequest;
 import test.task.stm.BuyTickets.models.Sale;
-import test.task.stm.BuyTickets.models.SaleRequest;
+import test.task.stm.BuyTickets.models.request.SaleRequest;
 import test.task.stm.BuyTickets.services.SaleService;
 
 import java.util.List;

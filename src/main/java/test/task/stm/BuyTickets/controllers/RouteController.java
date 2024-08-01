@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Route;
-import test.task.stm.BuyTickets.models.RouteRequest;
+import test.task.stm.BuyTickets.models.request.RouteRequest;
 import test.task.stm.BuyTickets.services.RouteService;
 
 import java.util.List;

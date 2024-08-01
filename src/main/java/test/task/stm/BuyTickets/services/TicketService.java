@@ -1,11 +1,9 @@
 package test.task.stm.BuyTickets.services;
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Ticket;
-import test.task.stm.BuyTickets.models.TicketRequest;
+import test.task.stm.BuyTickets.models.request.TicketRequest;
 import test.task.stm.BuyTickets.repositories.TicketRepository;
 
 import java.sql.Timestamp;

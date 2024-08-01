@@ -1,4 +1,4 @@
-package test.task.stm.BuyTickets.models;
+package test.task.stm.BuyTickets.models.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

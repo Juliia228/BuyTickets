@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Ticket;
-import test.task.stm.BuyTickets.models.TicketRequest;
+import test.task.stm.BuyTickets.models.request.TicketRequest;
 import test.task.stm.BuyTickets.repositories.TicketRepository;
 
 import java.sql.PreparedStatement;

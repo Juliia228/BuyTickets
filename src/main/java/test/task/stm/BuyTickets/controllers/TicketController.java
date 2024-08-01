@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Ticket;
-import test.task.stm.BuyTickets.models.TicketRequest;
+import test.task.stm.BuyTickets.models.request.TicketRequest;
 import test.task.stm.BuyTickets.services.TicketService;
 
 import java.sql.Date;
