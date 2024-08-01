@@ -10,7 +10,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -86,6 +88,27 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + exception);
         ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAnyException(Exception exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Непредвиденная ошибка", exception.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
 }
