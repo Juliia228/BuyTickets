@@ -26,23 +26,23 @@ public class PurchaseRepositoryImpl implements PurchaseRepository {
 
     @Override
     public Purchase get(int id) {
-        return jdbcTemplate.queryForObject("select * from sales where id = ?", ROW_MAPPER, id);
+        return jdbcTemplate.queryForObject("select * from purchases where id = ?", ROW_MAPPER, id);
     }
 
     @Override
     public List<Purchase> getAll() {
-        return jdbcTemplate.query("select * from sales", ROW_MAPPER);
+        return jdbcTemplate.query("select * from purchases", ROW_MAPPER);
     }
 
     @Override
-    public Purchase save(PurchaseRequest sale) {
+    public Purchase save(PurchaseRequest purchase) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement("insert into sales (user_id, ticket_id, sold_at) values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, sale.getUser_id());
-            ps.setInt(2, sale.getTicket_id());
-            ps.setTimestamp(3, sale.getSold_at());
+                    .prepareStatement("insert into purchases (user_id, ticket_id, sold_at) values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, purchase.getUser_id());
+            ps.setInt(2, purchase.getTicket_id());
+            ps.setTimestamp(3, purchase.getSold_at());
             return ps;
         }, generatedKeyHolder);
         if (generatedKeyHolder.getKeys() == null) {
@@ -54,7 +54,7 @@ public class PurchaseRepositoryImpl implements PurchaseRepository {
     @Override
     public Purchase update(Purchase purchase) {
         try {
-            jdbcTemplate.update("update sales set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", purchase.getUser_id(), purchase.getTicket_id(), purchase.getSold_at(), purchase.getId());
+            jdbcTemplate.update("update purchases set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", purchase.getUser_id(), purchase.getTicket_id(), purchase.getSold_at(), purchase.getId());
         } catch (Exception e) {
             log.debug("Данные о продаже " + purchase.getId() + " не обновлены");
         }
@@ -63,6 +63,6 @@ public class PurchaseRepositoryImpl implements PurchaseRepository {
 
     @Override
     public int delete(int id) {
-        return jdbcTemplate.update("delete from sales where id = ?", id);
+        return jdbcTemplate.update("delete from purchases where id = ?", id);
     }
 }

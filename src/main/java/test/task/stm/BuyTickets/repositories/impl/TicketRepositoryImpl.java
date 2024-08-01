@@ -29,17 +29,17 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public Ticket get(int id) {
         return jdbcTemplate.queryForObject("select * from tickets " +
-                "where id = ?",
+                        "where id = ?",
                 ROW_MAPPER, id);
     }
 
     @Override
     public List<Ticket> getByUser(int user_id) {
         return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "join users " +
-                        "on users.id = sales.user_id " +
+                        "on users.id = purchases.user_id " +
                         "and users.id = ?",
                 ROW_MAPPER, user_id);
     }
@@ -47,10 +47,10 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public List<Ticket> getByDateTime(Timestamp from, Timestamp to) {
         return jdbcTemplate.query("select * from tickets " +
-                "where departure_at between ? and ? " +
-                "except select tickets.* from tickets " +
-                "join sales " +
-                "on sales.ticket_id = tickets.id",
+                        "where departure_at between ? and ? " +
+                        "except select tickets.* from tickets " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER, from, to);
     }
 
@@ -59,8 +59,8 @@ public class TicketRepositoryImpl implements TicketRepository {
         return jdbcTemplate.query("select * from tickets " +
                         "where departure_at between ? and ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, from, to, size, offset);
     }
@@ -92,13 +92,13 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public List<Ticket> getByRoutePoints(String departure_point, String destination_point) {
         return jdbcTemplate.query("select tickets.* from tickets " +
-                "join routes " +
-                "on routes.id = tickets.route_id " +
-                "and routes.departure_point = ? " +
-                "and routes.destination_point = ? " +
-                "except select tickets.* from tickets " +
-                "join sales " +
-                "on sales.ticket_id = tickets.id",
+                        "join routes " +
+                        "on routes.id = tickets.route_id " +
+                        "and routes.departure_point = ? " +
+                        "and routes.destination_point = ? " +
+                        "except select tickets.* from tickets " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER, departure_point, destination_point);
     }
 
@@ -110,8 +110,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "and routes.departure_point = ? " +
                         "and routes.destination_point = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, departure_point, destination_point, size, offset);
     }
@@ -123,8 +123,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.departure_point = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id",
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER, departure_point);
     }
 
@@ -135,8 +135,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.departure_point = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, departure_point, size, offset);
     }
@@ -148,8 +148,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.destination_point = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id",
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER, destination_point);
     }
 
@@ -160,8 +160,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.destination_point = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, destination_point, size, offset);
     }
@@ -173,8 +173,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.transporter_name = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id",
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER, transporter_name);
     }
 
@@ -185,8 +185,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                         "on routes.id = tickets.route_id " +
                         "and routes.transporter_name = ? " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, transporter_name, size, offset);
     }
@@ -195,8 +195,8 @@ public class TicketRepositoryImpl implements TicketRepository {
     public List<Ticket> getAllNotAvailable() {
         return jdbcTemplate.query("select tickets.* from tickets " +
                         "intersect select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id",
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER);
     }
 
@@ -204,8 +204,8 @@ public class TicketRepositoryImpl implements TicketRepository {
     public List<Ticket> getAllAvailable() {
         return jdbcTemplate.query("select * from tickets " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id",
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id",
                 ROW_MAPPER);
     }
 
@@ -213,8 +213,8 @@ public class TicketRepositoryImpl implements TicketRepository {
     public List<Ticket> getAllAvailable(Integer offset, Integer size) {
         return jdbcTemplate.query("select * from tickets " +
                         "except select tickets.* from tickets " +
-                        "join sales " +
-                        "on sales.ticket_id = tickets.id " +
+                        "join purchases " +
+                        "on purchases.ticket_id = tickets.id " +
                         "limit ? offset ?",
                 ROW_MAPPER, size, offset);
     }
