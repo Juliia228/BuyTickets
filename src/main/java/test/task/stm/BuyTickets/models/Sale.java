@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sale {
+    @Min(value = 1)
     private int id;
     @Min(value = 1)
     private int user_id;

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Route {
+    @Min(value = 1)
     private int id;
     @NotBlank(message = "departure point is required")
     private String departure_point;

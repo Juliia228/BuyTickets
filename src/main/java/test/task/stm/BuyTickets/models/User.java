@@ -1,6 +1,7 @@
 package test.task.stm.BuyTickets.models;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    @Min(value = 1)
     private int id;
     @Email(message = "login must be email")
     private String login;

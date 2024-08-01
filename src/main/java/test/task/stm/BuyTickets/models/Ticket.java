@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ticket {
+    @Min(value = 1)
     private int id;
     @Min(value = 1)
     private int route_id;
