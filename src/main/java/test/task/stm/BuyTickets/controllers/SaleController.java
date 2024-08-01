@@ -35,8 +35,13 @@ public class SaleController {
         return ResponseEntity.ok(saleService.findAll());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Sale> newSale(@RequestBody Sale new_sale) {
+    @PostMapping("/buyTicket")
+    public ResponseEntity<Sale> buyTicket(@Valid @RequestBody BuyTicketRequest request) throws BadRequestException {
+        return ResponseEntity.ok(saleService.createSale(request));
+    }
+
+    @PostMapping("/sale/add")
+    public ResponseEntity<Sale> newSale(@Valid @RequestBody Sale new_sale) {
         // id необязательный параметр
         return ResponseEntity.ok(saleService.add(new_sale));
     }

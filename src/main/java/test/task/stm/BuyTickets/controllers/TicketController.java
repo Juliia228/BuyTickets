@@ -38,45 +38,67 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.findAll());
     }
 
-    @GetMapping("/getByDateTime")
-    public ResponseEntity<List<Ticket>> getTicketsByDateTime(@RequestParam Timestamp from, @RequestParam Timestamp to) {
-        // from не позднее текущего момента времени
-        return ResponseEntity.ok(ticketService.find(from, to));
+    @GetMapping("/getAllNotAvailable")
+    public ResponseEntity<List<Ticket>> getAllNotAvailableTickets() {
+        return ResponseEntity.ok(ticketService.findAllNotAvailable());
     }
 
-    @GetMapping("/getByDate")
-    public ResponseEntity<List<Ticket>> getTicketsByDate(@RequestParam Date from, @RequestParam Date to) {
-        return ResponseEntity.ok(ticketService.find(from, to));
+    @GetMapping("/available/getAll")
+    public ResponseEntity<List<Ticket>> getAllAvailableTickets(@RequestParam(required = false) @Min(0) Integer page,
+                                                               @RequestParam(required = false) @Min(1) Integer size) {
+        return ResponseEntity.ok(ticketService.findAllAvailable(page, size));
     }
 
-    @GetMapping("/getByDay")
-    public ResponseEntity<List<Ticket>> getTicketsByDay(@RequestParam Date day) {
-        return ResponseEntity.ok(ticketService.find(day));
+    @GetMapping("/available/getByDateTime")
+    public ResponseEntity<List<Ticket>> getTicketsByDateTime(@RequestParam(required = false) @Min(0) Integer page,
+                                                             @RequestParam(required = false) @Min(1) Integer size,
+                                                             @RequestParam @FutureOrPresent Timestamp from,
+                                                             @RequestParam @FutureOrPresent Timestamp to) {
+        return ResponseEntity.ok(ticketService.find(page, size, from, to));
     }
 
-    @GetMapping("/getByTime")
-    public ResponseEntity<List<Ticket>> getTicketsByTime(@RequestParam Time from, @RequestParam Time to) {
-        return ResponseEntity.ok(ticketService.find(from, to));
+    @GetMapping("/available/getByDate")
+    public ResponseEntity<List<Ticket>> getTicketsByDate(@RequestParam(required = false) @Min(0) Integer page,
+                                                         @RequestParam(required = false) @Min(1) Integer size,
+                                                         @RequestParam @FutureOrPresent Date from,
+                                                         @RequestParam @FutureOrPresent Date to) {
+        return ResponseEntity.ok(ticketService.find(page, size, from, to));
     }
 
-    @GetMapping("/getByRoute")
-    public List<Ticket> getTicketsByRoute(@RequestParam String departure_point, @RequestParam String destination_point) {
-        return ResponseEntity.ok(ticketService.find(departure_point, destination_point));
+    @GetMapping("/available/getByDay")
+    public ResponseEntity<List<Ticket>> getTicketsByDay(@RequestParam(required = false) @Min(0) Integer page,
+                                                        @RequestParam(required = false) @Min(1) Integer size,
+                                                        @RequestParam @FutureOrPresent Date day) {
+        return ResponseEntity.ok(ticketService.find(page, size, day));
     }
 
-    @GetMapping("/getByDeparturePoint")
-    public List<Ticket> getTicketsByDeparturePoint(@RequestParam String departure_point) {
-        return ResponseEntity.ok(ticketService.findByDeparturePoint(departure_point));
+    @GetMapping("/available/getByRoutePoints")
+    public ResponseEntity<List<Ticket>> getTicketsByRoutePoints(@RequestParam(required = false) @Min(0) Integer page,
+                                                                @RequestParam(required = false) @Min(1) Integer size,
+                                                                @RequestParam @NotBlank String departure_point,
+                                                                @RequestParam @NotBlank String destination_point) {
+        return ResponseEntity.ok(ticketService.find(page, size, departure_point, destination_point));
     }
 
-    @GetMapping("/getByDestinationPoint")
-    public List<Ticket> getTicketsByDestinationPoint(@RequestParam String destination_point) {
-        return ResponseEntity.ok(ticketService.findByDestinationPoint(destination_point));
+    @GetMapping("/available/getByDeparturePoint")
+    public ResponseEntity<List<Ticket>> getTicketsByDeparturePoint(@RequestParam(required = false) @Min(0) Integer page,
+                                                                   @RequestParam(required = false) @Min(1) Integer size,
+                                                                   @RequestParam @NotBlank String departure_point) {
+        return ResponseEntity.ok(ticketService.findByDeparturePoint(page, size, departure_point));
     }
 
-    @GetMapping("/getByTransporter")
-    public List<Ticket> getTicketsByTransporter(@RequestParam String transporter_name) {
-        return ResponseEntity.ok(ticketService.findByTransporter(transporter_name));
+    @GetMapping("/available/getByDestinationPoint")
+    public ResponseEntity<List<Ticket>> getTicketsByDestinationPoint(@RequestParam(required = false) @Min(0) Integer page,
+                                                                     @RequestParam(required = false) @Min(1) Integer size,
+                                                                     @RequestParam @NotBlank String destination_point) {
+        return ResponseEntity.ok(ticketService.findByDestinationPoint(page, size, destination_point));
+    }
+
+    @GetMapping("/available/getByTransporter")
+    public ResponseEntity<List<Ticket>> getTicketsByTransporter(@RequestParam(required = false) @Min(0) Integer page,
+                                                                @RequestParam(required = false) @Min(1) Integer size,
+                                                                @RequestParam @NotBlank String transporter_name) {
+        return ResponseEntity.ok(ticketService.findByTransporter(page, size, transporter_name));
     }
 
     @PostMapping("/add")
