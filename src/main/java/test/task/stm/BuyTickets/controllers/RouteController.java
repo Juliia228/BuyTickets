@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Route;
+import test.task.stm.BuyTickets.models.RouteRequest;
 import test.task.stm.BuyTickets.services.RouteService;
 
 import java.util.List;
@@ -35,14 +36,12 @@ public class RouteController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Route> newRoute(@Valid @RequestBody Route new_route) {
-        // id необязательный параметр
+    public ResponseEntity<Route> newRoute(@Valid @RequestBody RouteRequest new_route) {
         return ResponseEntity.ok(routeService.add(new_route));
     }
 
     @PutMapping("/edit")
     public ResponseEntity<Route> updateRoute(@Valid @RequestBody Route new_route) {
-        // id обязательный параметр
         return ResponseEntity.ok(routeService.edit(new_route));
     }
 

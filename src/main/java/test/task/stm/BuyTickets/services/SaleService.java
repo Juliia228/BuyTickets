@@ -4,6 +4,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.BuyTicketRequest;
+import test.task.stm.BuyTickets.models.SaleRequest;
 import test.task.stm.BuyTickets.models.Ticket;
 import test.task.stm.BuyTickets.models.Sale;
 import test.task.stm.BuyTickets.repositories.SaleRepository;
@@ -56,14 +57,14 @@ public class SaleService {
         if (isTicketSold(request.getTicket_id())) {
             throw new BadRequestException("Ticket with id=" + request.getTicket_id() + " is sold");
         }
-        return saleRepository.save(new Sale(request.getUser_id(), request.getTicket_id(), Timestamp.valueOf(LocalDateTime.now(ZoneId.of("ECT")))));
+        return saleRepository.save(new SaleRequest(request.getUser_id(), request.getTicket_id(), Timestamp.valueOf(LocalDateTime.now(ZoneId.of("ECT")))));
     }
 
     public boolean isTicketSold(int ticket_id) {
         return saleRepository.getAll().stream().anyMatch(sale -> sale.getTicket_id() == ticket_id);
     }
 
-    public Sale add(Sale sale) {
+    public Sale add(SaleRequest sale) {
         return saleRepository.save(sale);
     }
 

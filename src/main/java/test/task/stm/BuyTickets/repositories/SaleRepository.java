@@ -2,6 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.Sale;
+import test.task.stm.BuyTickets.models.SaleRequest;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface SaleRepository {
 
     List<Sale> getAll();
 
-    Sale save(Sale sale);
+    Sale save(SaleRequest sale);
 
     Sale update(Sale sale);
 

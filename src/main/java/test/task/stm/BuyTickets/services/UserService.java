@@ -3,6 +3,7 @@ package test.task.stm.BuyTickets.services;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.User;
+import test.task.stm.BuyTickets.models.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
 import java.util.List;
@@ -27,14 +28,11 @@ public class UserService {
         return users;
     }
 
-    public User add(User user) {
+    public User add(UserRequest user) {
         return userRepository.save(user);
     }
 
-    public User registerNewUser(User new_user) {
-//        if (new_user.getPassword().length() < 8) {
-//            throw new RegistrationException("Password must contain at least 8 characters");
-//        }
+    public User registerNewUser(UserRequest new_user) {
         return userRepository.save(new_user);
     }
 

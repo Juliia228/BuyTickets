@@ -41,7 +41,6 @@ public class TransporterController {
 
     @PutMapping("/edit")
     public ResponseEntity<Transporter> updateTransporter(@Valid @RequestBody Transporter new_transporter) {
-        // id обязательный параметр
         return ResponseEntity.ok(transporterService.edit(new_transporter));
     }
 

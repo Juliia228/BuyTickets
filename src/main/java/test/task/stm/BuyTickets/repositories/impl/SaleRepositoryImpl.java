@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Sale;
+import test.task.stm.BuyTickets.models.SaleRequest;
 import test.task.stm.BuyTickets.repositories.SaleRepository;
 
 import java.sql.PreparedStatement;
@@ -34,7 +35,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     }
 
     @Override
-    public Sale save(Sale sale) {
+    public Sale save(SaleRequest sale) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Route;
+import test.task.stm.BuyTickets.models.RouteRequest;
 import test.task.stm.BuyTickets.repositories.RouteRepository;
 
 import java.sql.PreparedStatement;
@@ -34,7 +35,7 @@ public class RouteRepositoryImpl implements RouteRepository {
     }
 
     @Override
-    public Route save(Route route) {
+    public Route save(RouteRequest route) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection

@@ -2,15 +2,10 @@ package test.task.stm.BuyTickets.models;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Route {
-    private int id;
+public class RouteRequest {
     @NotBlank(message = "departure point is required")
     private String departure_point;
     @NotBlank(message = "destination point is required")

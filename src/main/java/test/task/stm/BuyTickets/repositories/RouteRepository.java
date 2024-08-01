@@ -2,6 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.Route;
+import test.task.stm.BuyTickets.models.RouteRequest;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface RouteRepository {
 
     List<Route> getAll();
 
-    Route save(Route route);
+    Route save(RouteRequest route);
 
     Route update(Route route);
 

@@ -43,19 +43,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> doRegister(@Valid @RequestBody User new_user) {
+    public ResponseEntity<User> doRegister(@Valid @RequestBody UserRequest new_user) {
         return ResponseEntity.ok(userService.registerNewUser(new_user));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> newUser(@Valid @RequestBody User new_user) {
-        // id необязательный параметр
+    public ResponseEntity<User> newUser(@Valid @RequestBody UserRequest new_user) {
         return ResponseEntity.ok(userService.add(new_user));
     }
 
     @PutMapping("/edit")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User new_user) {
-        // id обязательный параметр
         return ResponseEntity.ok(userService.edit(new_user));
     }
 

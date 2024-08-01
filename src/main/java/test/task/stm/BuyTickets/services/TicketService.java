@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Ticket;
+import test.task.stm.BuyTickets.models.TicketRequest;
 import test.task.stm.BuyTickets.repositories.TicketRepository;
 
 import java.sql.Timestamp;
@@ -83,7 +84,7 @@ public class TicketService {
         return tickets;
     }
 
-    public Ticket add(Ticket ticket) {
+    public Ticket add(TicketRequest ticket) {
         return ticketRepository.save(ticket);
     }
 

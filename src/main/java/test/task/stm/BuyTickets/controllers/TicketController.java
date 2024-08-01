@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Ticket;
+import test.task.stm.BuyTickets.models.TicketRequest;
 import test.task.stm.BuyTickets.services.TicketService;
 
 import java.sql.Date;
@@ -102,14 +103,12 @@ public class TicketController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Ticket> newTicket(@Valid @RequestBody Ticket new_ticket) {
-        // id необязательный параметр
+    public ResponseEntity<Ticket> newTicket(@Valid @RequestBody TicketRequest new_ticket) {
         return ResponseEntity.ok(ticketService.add(new_ticket));
     }
 
     @PutMapping("/edit")
     public ResponseEntity<Ticket> updateTicket(@Valid @RequestBody Ticket new_ticket) {
-        // id обязательный параметр
         return ResponseEntity.ok(ticketService.edit(new_ticket));
     }
 

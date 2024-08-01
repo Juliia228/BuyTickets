@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.BuyTicketRequest;
 import test.task.stm.BuyTickets.models.Sale;
+import test.task.stm.BuyTickets.models.SaleRequest;
 import test.task.stm.BuyTickets.services.SaleService;
 
 import java.util.List;
@@ -41,14 +42,12 @@ public class SaleController {
     }
 
     @PostMapping("/sale/add")
-    public ResponseEntity<Sale> newSale(@Valid @RequestBody Sale new_sale) {
-        // id необязательный параметр
+    public ResponseEntity<Sale> newSale(@Valid @RequestBody SaleRequest new_sale) {
         return ResponseEntity.ok(saleService.add(new_sale));
     }
 
     @PutMapping("/sale/edit")
     public ResponseEntity<Sale> updateSale(@Valid @RequestBody Sale new_sale) {
-        // id обязательный параметр
         return ResponseEntity.ok(saleService.edit(new_sale));
     }
 

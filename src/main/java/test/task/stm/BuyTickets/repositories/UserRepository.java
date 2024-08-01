@@ -2,6 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.User;
+import test.task.stm.BuyTickets.models.UserRequest;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    User save(User user);
+    User save(UserRequest user);
 
     User update(User user);
 

@@ -3,6 +3,7 @@ package test.task.stm.BuyTickets.services;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Route;
+import test.task.stm.BuyTickets.models.RouteRequest;
 import test.task.stm.BuyTickets.repositories.RouteRepository;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class RouteService {
         return routes;
     }
 
-    public Route add(Route route) {
+    public Route add(RouteRequest route) {
         return routeRepository.save(route);
     }
 

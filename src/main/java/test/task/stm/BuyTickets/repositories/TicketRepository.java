@@ -2,6 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.Ticket;
+import test.task.stm.BuyTickets.models.TicketRequest;
 
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -49,7 +50,7 @@ public interface TicketRepository {
 
     List<Ticket> getAll();
 
-    Ticket save(Ticket ticket);
+    Ticket save(TicketRequest ticket);
 
     Ticket update(Ticket ticket);
 
