@@ -13,7 +13,7 @@ public interface PurchaseRepository {
             new Purchase(resultSet.getInt("id"),
                     resultSet.getInt("user_id"),
                     resultSet.getInt("ticket_id"),
-                    resultSet.getObject("sold_at", OffsetDateTime.class));
+                    resultSet.getObject("sold_at", OffsetDateTime.class).plusHours(3));
 
     Purchase get(int id);
 
