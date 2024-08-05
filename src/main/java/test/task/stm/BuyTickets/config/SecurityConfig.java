@@ -51,8 +51,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("swagger-ui/**", "swagger-resources/**", "v3/api-docs/**").permitAll()
                         .requestMatchers("user/register", "user/signIn").permitAll()
-                        .requestMatchers("buyTicket").hasRole("USER")
-                        .requestMatchers("route/getById", "route/getAll", "boughtTickets",
+                        .requestMatchers("buyTicket", "ticket/boughtTickets").hasRole("USER")
+                        .requestMatchers("route/getById", "route/getAll",
                                 "ticket/getById", "ticket/available/getAll", "ticket/available/get",
                                 "transporter/getByName", "transporter/getAll").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("purchase/**", "route/**", "ticket/**", "transporter/**", "user/**").hasRole("ADMIN")
