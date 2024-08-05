@@ -17,7 +17,6 @@ import java.util.List;
 @Repository
 public class RouteRepositoryImpl implements RouteRepository {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final JdbcTemplate jdbcTemplate;
 
     public RouteRepositoryImpl(JdbcTemplate jdbcTemplate) {

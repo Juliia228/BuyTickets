@@ -17,7 +17,6 @@ import java.util.List;
 @Repository
 public class PurchaseRepositoryImpl implements PurchaseRepository {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final JdbcTemplate jdbcTemplate;
 
     public PurchaseRepositoryImpl(JdbcTemplate jdbcTemplate) {
@@ -53,11 +52,7 @@ public class PurchaseRepositoryImpl implements PurchaseRepository {
 
     @Override
     public Purchase update(Purchase purchase) {
-        try {
-            jdbcTemplate.update("update purchases set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", purchase.getUser_id(), purchase.getTicket_id(), purchase.getSold_at(), purchase.getId());
-        } catch (Exception e) {
-            log.debug("Данные о продаже " + purchase.getId() + " не обновлены");
-        }
+        jdbcTemplate.update("update purchases set user_id = ?, ticket_id = ?, sold_at = ? where id = ?", purchase.getUser_id(), purchase.getTicket_id(), purchase.getSold_at(), purchase.getId());
         return get(purchase.getId());
     }
 

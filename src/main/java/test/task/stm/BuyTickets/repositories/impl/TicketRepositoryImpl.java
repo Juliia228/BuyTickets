@@ -13,13 +13,11 @@ import test.task.stm.BuyTickets.repositories.TicketRepository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Repository
 public class TicketRepositoryImpl implements TicketRepository {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final JdbcTemplate jdbcTemplate;
 
     public TicketRepositoryImpl(JdbcTemplate jdbcTemplate) {
@@ -45,151 +43,173 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public List<Ticket> getByDateTime(Timestamp from, Timestamp to) {
-        return jdbcTemplate.query("select * from tickets " +
-                        "where departure_at between ? and ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER, from, to);
+    public List<Ticket> getByParams(Integer offset, Integer size, Timestamp from, Timestamp to,
+                                    String departure_point, String destination_point, String transporter_name) {
+        return jdbcTemplate.query("SELECT tickets.* FROM tickets " +
+                        "JOIN routes ON routes.id = tickets.route_id " +
+                        ((transporter_name != null) ? "AND routes.transporter_name LIKE '%" + transporter_name + "%' " : "") +
+                        ((departure_point != null) ? "AND routes.departure_point LIKE '%" + departure_point + "%' " : "") +
+                        ((destination_point != null) ? "AND routes.destination_point LIKE '%" + destination_point  + "%' " : "") +
+                        ((from != null && to != null)
+                                ? "WHERE departure_at BETWEEN " + departure_point + " AND " + destination_point
+                                    : ((from != null)
+                                    ? " WHERE departure_at >= " + departure_point
+                                    : ((to != null)
+                                    ? " WHERE departure_at <= " + destination_point
+                                    : "")) +
+                                " EXCEPT SELECT tickets.* FROM tickets " +
+                                "JOIN purchases " +
+                                "ON purchases.ticket_id = tickets.id " +
+                                ((offset != null && size != null) ? "LIMIT " + size + " OFFSET " + offset : "")),
+                ROW_MAPPER);
     }
 
-    @Override
-    public List<Ticket> getByDateTime(Integer offset, Integer size, Timestamp from, Timestamp to) {
-        return jdbcTemplate.query("select * from tickets " +
-                        "where departure_at between ? and ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, from, to, size, offset);
-    }
-
-    @Override
-    public List<Ticket> getByDate(Date from, Date to) {
-        return null;
-//        return jdbcTemplate.query("select * from tickets where departure_at between ? and ?", ROW_MAPPER, from, to);
-    }
-
-    @Override
-    public List<Ticket> getByDate(Integer offset, Integer size, Date from, Date to) {
-        return null;
-//        return jdbcTemplate.query("select * from tickets where departure_at between ? and ?", ROW_MAPPER, from, to);
-    }
-
-    @Override
-    public List<Ticket> getByDay(Date day) {
-        return null;
-//        return jdbcTemplate.query("select * from tickets where departure_at = ?", ROW_MAPPER, from, to);
-    }
-
-    @Override
-    public List<Ticket> getByDay(Integer offset, Integer size, Date day) {
-        return null;
-//        return jdbcTemplate.query("select * from tickets where departure_at = ?", ROW_MAPPER, from, to);
-    }
-
-    @Override
-    public List<Ticket> getByRoutePoints(String departure_point, String destination_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.departure_point = ? " +
-                        "and routes.destination_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER, departure_point, destination_point);
-    }
-
-    @Override
-    public List<Ticket> getByRoutePoints(Integer offset, Integer size, String departure_point, String destination_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.departure_point = ? " +
-                        "and routes.destination_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, departure_point, destination_point, size, offset);
-    }
-
-    @Override
-    public List<Ticket> getByDeparturePoint(String departure_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.departure_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER, departure_point);
-    }
-
-    @Override
-    public List<Ticket> getByDeparturePoint(Integer offset, Integer size, String departure_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.departure_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, departure_point, size, offset);
-    }
-
-    @Override
-    public List<Ticket> getByDestinationPoint(String destination_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.destination_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER, destination_point);
-    }
-
-    @Override
-    public List<Ticket> getByDestinationPoint(Integer offset, Integer size, String destination_point) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.destination_point = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, destination_point, size, offset);
-    }
-
-    @Override
-    public List<Ticket> getByTransporter(String transporter_name) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.transporter_name = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER, transporter_name);
-    }
-
-    @Override
-    public List<Ticket> getByTransporter(Integer offset, Integer size, String transporter_name) {
-        return jdbcTemplate.query("select tickets.* from tickets " +
-                        "join routes " +
-                        "on routes.id = tickets.route_id " +
-                        "and routes.transporter_name = ? " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, transporter_name, size, offset);
-    }
+//    @Override
+//    public List<Ticket> getByDateTime(Timestamp from, Timestamp to) {
+//        return jdbcTemplate.query("select * from tickets " +
+//                        "where departure_at between ? and ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id",
+//                ROW_MAPPER, from, to);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDateTime(Integer offset, Integer size, Timestamp from, Timestamp to) {
+//        return jdbcTemplate.query("select * from tickets " +
+//                        "where departure_at between ? and ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id " +
+//                        "limit ? offset ?",
+//                ROW_MAPPER, from, to, size, offset);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDate(Date from, Date to) {
+//        return null;
+////        return jdbcTemplate.query("select * from tickets where departure_at between ? and ?", ROW_MAPPER, from, to);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDate(Integer offset, Integer size, Date from, Date to) {
+//        return null;
+////        return jdbcTemplate.query("select * from tickets where departure_at between ? and ?", ROW_MAPPER, from, to);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDay(Date day) {
+//        return null;
+////        return jdbcTemplate.query("select * from tickets where departure_at = ?", ROW_MAPPER, from, to);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDay(Integer offset, Integer size, Date day) {
+//        return null;
+////        return jdbcTemplate.query("select * from tickets where departure_at = ?", ROW_MAPPER, from, to);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByRoutePoints(String departure_point, String destination_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.departure_point = ? " +
+//                        "and routes.destination_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id",
+//                ROW_MAPPER, departure_point, destination_point);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByRoutePoints(Integer offset, Integer size, String departure_point, String destination_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.departure_point = ? " +
+//                        "and routes.destination_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id " +
+//                        "limit ? offset ?",
+//                ROW_MAPPER, departure_point, destination_point, size, offset);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDeparturePoint(String departure_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.departure_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id",
+//                ROW_MAPPER, departure_point);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDeparturePoint(Integer offset, Integer size, String departure_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.departure_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id " +
+//                        "limit ? offset ?",
+//                ROW_MAPPER, departure_point, size, offset);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDestinationPoint(String destination_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.destination_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id",
+//                ROW_MAPPER, destination_point);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByDestinationPoint(Integer offset, Integer size, String destination_point) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.destination_point = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id " +
+//                        "limit ? offset ?",
+//                ROW_MAPPER, destination_point, size, offset);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByTransporter(String transporter_name) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.transporter_name = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id",
+//                ROW_MAPPER, transporter_name);
+//    }
+//
+//    @Override
+//    public List<Ticket> getByTransporter(Integer offset, Integer size, String transporter_name) {
+//        return jdbcTemplate.query("select tickets.* from tickets " +
+//                        "join routes " +
+//                        "on routes.id = tickets.route_id " +
+//                        "and routes.transporter_name = ? " +
+//                        "except select tickets.* from tickets " +
+//                        "join purchases " +
+//                        "on purchases.ticket_id = tickets.id " +
+//                        "limit ? offset ?",
+//                ROW_MAPPER, transporter_name, size, offset);
+//    }
 
     @Override
     public List<Ticket> getAllNotAvailable() {
@@ -229,7 +249,8 @@ public class TicketRepositoryImpl implements TicketRepository {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement("insert into tickets (route_id, departure_at, seat_number, price) values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement("insert into tickets (route_id, departure_at, seat_number, price) values (?, ?, ?, ?)",
+                            Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, ticket.getRoute_id());
             ps.setTimestamp(2, ticket.getDeparture_at());
             ps.setInt(3, ticket.getSeat_number());
@@ -244,11 +265,8 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public Ticket update(Ticket ticket) {
-        try {
-            jdbcTemplate.update("update tickets set route_id = ?, departure_at = ?, seat_number = ?, price = ? where id = ?", ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice(), ticket.getId());
-        } catch (Exception e) {
-            log.debug("Данные о билете " + ticket.getId() + " не обновлены");
-        }
+        jdbcTemplate.update("update tickets set route_id = ?, departure_at = ?, seat_number = ?, price = ? where id = ?",
+                ticket.getRoute_id(), ticket.getDeparture_at(), ticket.getSeat_number(), ticket.getPrice(), ticket.getId());
         return get(ticket.getId());
     }
 

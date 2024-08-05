@@ -22,7 +22,6 @@ import java.util.List;
 @Tag(name="Маршруты", description="Взаимодействие с маршрутами")
 public class RouteController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final RouteService routeService;
 
     public RouteController(RouteService routeService) {

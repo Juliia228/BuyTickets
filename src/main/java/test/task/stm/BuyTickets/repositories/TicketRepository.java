@@ -10,7 +10,12 @@ import java.util.Date;
 import java.util.List;
 
 public interface TicketRepository {
-    RowMapper<Ticket> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Ticket(resultSet.getInt("id"), resultSet.getInt("route_id"), resultSet.getTimestamp("departure_at"), resultSet.getInt("seat_number"), resultSet.getLong("price"));
+    RowMapper<Ticket> ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            new Ticket(resultSet.getInt("id"),
+                    resultSet.getInt("route_id"),
+                    resultSet.getTimestamp("departure_at"),
+                    resultSet.getInt("seat_number"),
+                    resultSet.getLong("price"));
 
     Ticket get(int id);
 

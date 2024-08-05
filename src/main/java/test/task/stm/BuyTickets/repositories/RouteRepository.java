@@ -8,7 +8,12 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public interface RouteRepository {
-    RowMapper<Route> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Route(resultSet.getInt("id"), resultSet.getString("departure_point"), resultSet.getString("destination_point"), resultSet.getString("transporter_name"), resultSet.getInt("minutes"));
+    RowMapper<Route> ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            new Route(resultSet.getInt("id"),
+                    resultSet.getString("departure_point"),
+                    resultSet.getString("destination_point"),
+                    resultSet.getString("transporter_name"),
+                    resultSet.getInt("minutes"));
 
     Route get(int id);
 

@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public class TransporterRepositoryImpl implements TransporterRepository {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final JdbcTemplate jdbcTemplate;
 
     public TransporterRepositoryImpl(JdbcTemplate jdbcTemplate) {

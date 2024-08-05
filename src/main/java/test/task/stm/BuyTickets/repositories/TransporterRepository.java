@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public interface TransporterRepository {
-    RowMapper<Transporter> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Transporter(resultSet.getString("name"), resultSet.getString("phone"));
+    RowMapper<Transporter> ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            new Transporter(resultSet.getString("name"),
+                    resultSet.getString("phone"));
 
     Transporter get(String name);
 
