@@ -83,15 +83,6 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
 
-//    @Operation(
-//            summary = "Получение купленных билетов для текущего пользователя",
-//            description = "Позволяет получить список всех купленных билетов для текущего пользователя по его id"
-//    )
-//    @GetMapping("/boughtTickets")
-//    //public ResponseEntity<List<Ticket>> getBoughtTickets(//убрать @RequestParam @Min(1) @Parameter(description = "Идентификатор пользователя") int id) {
-//        return ResponseEntity.ok(ticketService.findByUser(id));
-//    }
-
     @Operation(
             summary = "Регистрация пользователя",
             description = "Позволяет зарегистрировать и аутентифицировать нового пользователя"

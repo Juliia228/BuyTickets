@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Ticket;
+import test.task.stm.BuyTickets.models.User;
 import test.task.stm.BuyTickets.models.request.TicketRequest;
 import test.task.stm.BuyTickets.services.TicketService;
+import test.task.stm.BuyTickets.services.UserService;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -26,9 +28,21 @@ import java.util.List;
 public class TicketController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final TicketService ticketService;
+    private final UserService userService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, UserService userService) {
         this.ticketService = ticketService;
+        this.userService = userService;
+    }
+
+    @Operation(
+            summary = "Получение купленных билетов для текущего пользователя",
+            description = "Позволяет получить список всех купленных билетов для текущего пользователя"
+    )
+    @GetMapping("/boughtTickets")
+    public ResponseEntity<List<Ticket>> getBoughtTickets() {
+        User current_user = userService.getCurrentUser();
+        return ResponseEntity.ok(ticketService.findByUser(current_user.getId()));
     }
 
     @Operation(

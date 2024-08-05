@@ -15,9 +15,11 @@ import java.util.List;
 @Service
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
+    private final UserService userService;
 
-    PurchaseService(PurchaseRepository purchaseRepository) {
+    PurchaseService(PurchaseRepository purchaseRepository, UserService userService) {
         this.purchaseRepository = purchaseRepository;
+        this.userService = userService;
     }
 
     public Purchase find(int id) {
@@ -32,13 +34,12 @@ public class PurchaseService {
         return purchases;
     }
 
-    public Purchase createPurchase(BuyTicketRequest request) throws BadRequestException {
-        if (isTicketSold(request.getTicket_id())) {
-            throw new BadRequestException("Ticket with id=" + request.getTicket_id() + " is sold");
+    public Purchase createPurchase(int ticket_id) throws BadRequestException {
+        if (isTicketSold(ticket_id)) {
+            throw new BadRequestException("Ticket with id=" + ticket_id + " is sold");
         }
-        return purchaseRepository.save(new PurchaseRequest(request.getUser_id(), request.getTicket_id(),
-                OffsetDateTime.now(ZoneId.of("UTC+3"))
-        ));
+        PurchaseRequest purchase = new PurchaseRequest(userService.getCurrentUser().getId(), ticket_id, OffsetDateTime.now(ZoneId.of("UTC+3")));
+        return purchaseRepository.save(purchase);
     }
 
     public boolean isTicketSold(int ticket_id) {

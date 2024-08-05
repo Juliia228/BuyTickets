@@ -49,11 +49,11 @@ public class PurchaseController {
 
     @Operation(
             summary = "Осуществление покупки билета",
-            description = ""
+            description = "Текущий пользователь покупает билет по его id"
     )
     @PostMapping("/buyTicket")
-    public ResponseEntity<Purchase> buyTicket(@Valid @RequestBody @Parameter(description = "id пользователя, купившего билет и id купленного билета") BuyTicketRequest request) throws BadRequestException {
-        return ResponseEntity.ok(purchaseService.createPurchase(request));
+    public ResponseEntity<Purchase> buyTicket(@RequestParam @Min(1) @Parameter(description = "id билета") int ticket_id) throws BadRequestException {
+        return ResponseEntity.ok(purchaseService.createPurchase(ticket_id));
     }
 
     @Operation(
