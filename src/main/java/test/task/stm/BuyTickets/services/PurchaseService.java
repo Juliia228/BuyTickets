@@ -7,10 +7,8 @@ import test.task.stm.BuyTickets.models.Purchase;
 import test.task.stm.BuyTickets.models.request.BuyTicketRequest;
 import test.task.stm.BuyTickets.models.request.PurchaseRequest;
 import test.task.stm.BuyTickets.repositories.PurchaseRepository;
-import test.task.stm.BuyTickets.repositories.TicketRepository;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -18,11 +16,8 @@ import java.util.List;
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
 
-    private final TicketRepository ticketRepository;
-
-    PurchaseService(PurchaseRepository purchaseRepository, TicketRepository ticketRepository) {
+    PurchaseService(PurchaseRepository purchaseRepository) {
         this.purchaseRepository = purchaseRepository;
-        this.ticketRepository = ticketRepository;
     }
 
     public Purchase find(int id) {
@@ -41,7 +36,9 @@ public class PurchaseService {
         if (isTicketSold(request.getTicket_id())) {
             throw new BadRequestException("Ticket with id=" + request.getTicket_id() + " is sold");
         }
-        return purchaseRepository.save(new PurchaseRequest(request.getUser_id(), request.getTicket_id(), Timestamp.valueOf(LocalDateTime.now(ZoneId.of("ECT")))));
+        return purchaseRepository.save(new PurchaseRequest(request.getUser_id(), request.getTicket_id(),
+                OffsetDateTime.now(ZoneId.of("UTC+3"))
+        ));
     }
 
     public boolean isTicketSold(int ticket_id) {

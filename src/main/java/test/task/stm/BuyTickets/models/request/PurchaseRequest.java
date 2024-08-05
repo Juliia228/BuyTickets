@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +22,5 @@ public class PurchaseRequest {
     private int ticket_id;
     @Schema(description = "Дата и время покупки")
     @NotNull
-    private Timestamp sold_at;
+    private OffsetDateTime sold_at;
 }

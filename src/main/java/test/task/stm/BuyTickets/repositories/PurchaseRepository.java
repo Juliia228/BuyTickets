@@ -5,10 +5,15 @@ import test.task.stm.BuyTickets.models.Purchase;
 import test.task.stm.BuyTickets.models.request.PurchaseRequest;
 
 import java.sql.ResultSet;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface PurchaseRepository {
-    RowMapper<Purchase> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Purchase(resultSet.getInt("id"), resultSet.getInt("user_id"), resultSet.getInt("ticket_id"), resultSet.getTimestamp("sold_at"));
+    RowMapper<Purchase> ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            new Purchase(resultSet.getInt("id"),
+                    resultSet.getInt("user_id"),
+                    resultSet.getInt("ticket_id"),
+                    resultSet.getObject("sold_at", OffsetDateTime.class));
 
     Purchase get(int id);
 
