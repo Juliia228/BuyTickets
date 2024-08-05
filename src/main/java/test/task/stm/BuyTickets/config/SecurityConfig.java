@@ -49,10 +49,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // доступ к конечным точкам в зависимости от роли
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*").permitAll()
+                        .requestMatchers("swagger-ui/**", "swagger-resources/**", "v3/api-docs/**").permitAll()
                         .requestMatchers("user/register", "user/signIn").permitAll()
                         .requestMatchers("buyTicket").hasRole("USER")
-                        .requestMatchers("/route/getById", "/route/getAll", "boughtTickets",
+                        .requestMatchers("route/getById", "route/getAll", "boughtTickets",
                                 "ticket/getById", "ticket/available/getAll", "ticket/available/get",
                                 "transporter/getByName", "transporter/getAll").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("purchase/**", "route/**", "ticket/**", "transporter/**", "user/**").hasRole("ADMIN")
