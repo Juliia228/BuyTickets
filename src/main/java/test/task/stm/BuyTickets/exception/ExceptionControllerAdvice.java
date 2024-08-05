@@ -11,6 +11,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -102,6 +103,13 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException exception, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + exception);
         ErrorResponse errorResponse = new ErrorResponse("Невалидные параметры запроса", exception.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Аутентификация невозможна", exception.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
