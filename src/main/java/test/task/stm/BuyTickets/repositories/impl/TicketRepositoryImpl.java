@@ -125,6 +125,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public int delete(int id) {
-        return jdbcTemplate.update("delete from tickets where id = ?", id);
+        return jdbcTemplate.update("delete from tickets " +
+                "where id = ?", id);
     }
 }

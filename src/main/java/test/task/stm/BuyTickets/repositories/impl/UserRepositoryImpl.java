@@ -27,12 +27,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        return jdbcTemplate.queryForObject("select * from users where id = ?", ROW_MAPPER, id);
+        return jdbcTemplate.queryForObject("select * from users " +
+                "where id = ?", ROW_MAPPER, id);
     }
 
     @Override
     public User getByLogin(String login) {
-        return jdbcTemplate.queryForObject("select * from users where login = ?", ROW_MAPPER, login);
+        return jdbcTemplate.queryForObject("select * from users " +
+                "where login = ?", ROW_MAPPER, login);
     }
 
     @Override
@@ -84,6 +86,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int delete(int id) {
-        return jdbcTemplate.update("delete from users where id = ?", id);
+        return jdbcTemplate.update("delete from users " +
+                "where id = ?", id);
     }
 }

@@ -20,7 +20,8 @@ public class TransporterRepositoryImpl implements TransporterRepository {
 
     @Override
     public Transporter get(String name) {
-        return jdbcTemplate.queryForObject("select * from transporters where name = ?", ROW_MAPPER, name);
+        return jdbcTemplate.queryForObject("select * from transporters " +
+                "where name = ?", ROW_MAPPER, name);
     }
 
     @Override
@@ -30,18 +31,21 @@ public class TransporterRepositoryImpl implements TransporterRepository {
 
     @Override
     public Transporter save(Transporter transporter) {
-        jdbcTemplate.update("insert into transporters values (?, ?)", transporter.getName(), transporter.getPhone());
+        jdbcTemplate.update("insert into transporters values (?, ?)",
+                transporter.getName(), transporter.getPhone());
         return get(transporter.getName());
     }
 
     @Override
     public Transporter update(Transporter transporter) {
-        jdbcTemplate.update("update transporters set phone = ? where name = ?", transporter.getPhone(), transporter.getName());
+        jdbcTemplate.update("update transporters set phone = ? where name = ?",
+                transporter.getPhone(), transporter.getName());
         return get(transporter.getName());
     }
 
     @Override
     public int delete(String name) {
-        return jdbcTemplate.update("delete from transporters where name = ?", name);
+        return jdbcTemplate.update("delete from transporters " +
+                "where name = ?", name);
     }
 }
