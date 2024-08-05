@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -29,5 +28,5 @@ public class UserRequest {
     @Schema(description = "Отчество")
     private String patronymic;
     @Schema(description = "Роли пользователя")
-    private Set<String> roles;
+    private String[] roles;
 }

@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,5 +35,5 @@ public class User {
     private String patronymic;
     @Schema(description = "Роли пользователя")
     @NotEmpty(message = "any user must have role")
-    private Set<String> roles;
+    private String[] roles;
 }

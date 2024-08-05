@@ -11,6 +11,8 @@ import test.task.stm.BuyTickets.models.UserDetailsImpl;
 import test.task.stm.BuyTickets.models.request.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -61,7 +63,11 @@ public class UserService {
 
     public User setRoleAdmin(int id) {
         User user = find(id);
-        user.getRoles().add(Role.ROLE_ADMIN.name());
+        List<String> roles = new ArrayList<>(Arrays.asList(user.getRoles()));
+        if (!roles.contains(Role.ROLE_ADMIN.name())) {
+            roles.add(Role.ROLE_ADMIN.name());
+        }
+        user.setRoles(roles.toArray(user.getRoles()));
         return userRepository.update(user);
     }
 

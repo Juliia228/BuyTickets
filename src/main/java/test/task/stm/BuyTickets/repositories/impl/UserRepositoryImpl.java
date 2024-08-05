@@ -12,8 +12,7 @@ import test.task.stm.BuyTickets.models.User;
 import test.task.stm.BuyTickets.models.request.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 @Repository
@@ -64,10 +63,14 @@ public class UserRepositoryImpl implements UserRepository {
             ps.setString(3, user.getLast_name());
             ps.setString(4, user.getFirst_name());
             ps.setString(5, user.getPatronymic());
-            if (user.getRoles() == null || user.getRoles().isEmpty()) {
-                ps.setObject(6, Set.of(Role.ROLE_USER.name()));
+            if (user.getRoles() == null || user.getRoles().length == 0) {
+                ps.setObject(6, new String[]{Role.ROLE_USER.name()});
             } else {
-                ps.setObject(6, user.getRoles());
+                List<String> roles = new ArrayList<>(Arrays.asList(user.getRoles()));
+                if (!roles.contains(Role.ROLE_USER.name())) {
+                    roles.add(Role.ROLE_USER.name());
+                }
+                ps.setObject(6, roles.toArray(user.getRoles()));
             }
             return ps;
         }, generatedKeyHolder);
