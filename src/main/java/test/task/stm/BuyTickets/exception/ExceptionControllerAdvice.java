@@ -1,5 +1,6 @@
 package test.task.stm.BuyTickets.exception;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
@@ -11,6 +12,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -110,7 +112,21 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + exception);
         ErrorResponse errorResponse = new ErrorResponse("Аутентификация невозможна", exception.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(403).body(errorResponse);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Неверный пароль", exception.getMessage());
+        return ResponseEntity.status(403).body(errorResponse);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtException(JwtException exception, HttpServletRequest request) {
+        log.error(request.getRequestURL() + " raised " + exception);
+        ErrorResponse errorResponse = new ErrorResponse("Недействительный токен", exception.getMessage());
+        return ResponseEntity.status(401).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

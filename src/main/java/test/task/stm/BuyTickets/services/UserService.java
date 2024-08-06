@@ -1,6 +1,11 @@
 package test.task.stm.BuyTickets.services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
@@ -19,11 +24,15 @@ public class UserService {
     UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public User getCurrentUser() {
@@ -49,6 +58,20 @@ public class UserService {
 
     public User add(UserRequest user) {
         return userRepository.save(user);
+    }
+
+    public AuthResponse authorise(String login, String password) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+        if (authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            new UserDetailsImpl(userService.findByLogin(request.getLogin()));
+            String jwtToken = jwtService.generateToken(userDetails);
+            RefreshToken token = refreshTokenService.createRefreshToken(login);;
+            User user = findByLogin(login);
+            return new AuthResponse(user, jwtToken, token.getToken(), token.getExpiration());
+        } else {
+            throw new UsernameNotFoundException("User is not authorized");
+        }
     }
 
     public String createToken(UserRequest new_user) {

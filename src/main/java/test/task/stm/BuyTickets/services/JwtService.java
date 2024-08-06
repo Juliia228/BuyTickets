@@ -8,7 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import test.task.stm.BuyTickets.models.User;
+import test.task.stm.BuyTickets.repositories.UserRepository;
 
 import java.security.Key;
 import java.util.Date;
@@ -20,6 +20,12 @@ import java.util.function.Function;
 public class JwtService {
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    private final UserRepository userRepository;
+
+    public JwtService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -54,11 +60,8 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof User user) {
-            claims.put("id", user.getId());
-            claims.put("login", user.getLogin());
-            claims.put("roles", user.getRoles());
-        }
+        claims.put("user_id", userRepository.getByLogin(userDetails.getUsername()).getId());
+        claims.put("roles", userDetails.getAuthorities());
         return createToken(claims, userDetails);
     }
 

@@ -50,7 +50,7 @@ public class SecurityConfig {
                 // доступ к конечным точкам в зависимости от роли
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("swagger-ui/**", "swagger-resources/**", "v3/api-docs/**").permitAll()
-                        .requestMatchers("user/register", "user/signIn").permitAll()
+                        .requestMatchers("user/register", "user/signIn", "user/refreshToken").permitAll()
                         .requestMatchers("buyTicket", "ticket/boughtTickets").hasRole("USER")
                         .requestMatchers("route/getById", "route/getAll",
                                 "ticket/getById", "ticket/available/getAll", "ticket/available/get",

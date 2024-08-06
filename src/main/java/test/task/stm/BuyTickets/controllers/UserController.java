@@ -4,24 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.*;
-import test.task.stm.BuyTickets.models.request.UserRequest;
-import test.task.stm.BuyTickets.services.JwtService;
+import test.task.stm.BuyTickets.models.DTO.*;
+import test.task.stm.BuyTickets.services.RefreshTokenService;
 import test.task.stm.BuyTickets.services.UserService;
 
 import java.util.List;
@@ -34,13 +25,49 @@ public class UserController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
-    UserController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService) {
+    UserController(UserService userService, RefreshTokenService refreshTokenService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
+    }
+
+    @Operation(
+            summary = "Регистрация пользователя",
+            description = "Позволяет зарегистрировать и аутентифицировать нового пользователя"
+    )
+    @PostMapping("/signUp")
+    public ResponseEntity<String> register(@Valid @RequestBody @Parameter(description = "Данные пользователя") UserRequest new_user) {
+        String token = userService.createToken(new_user);
+        //UserDetails userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        return ResponseEntity.ok(token);
+    }
+
+    @Operation(
+            summary = "Авторизация пользователя",
+            description = "Позволяет аутентифицировать пользователя по логину и паролю"
+    )
+    @PostMapping("/signIn")
+    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody @Parameter(description = "Данные пользователя для авторизации") AuthRequest request) {
+        return ResponseEntity.ok(userService.authorise(request.getLogin(), request.getPassword()));
+    }
+
+    @Operation(
+            summary = "Обновление access токена по refresh токену",
+            description = "Позволяет зарегистрировать и аутентифицировать нового пользователя"
+    )
+    @PostMapping("/refreshToken")
+    public ResponseEntity<RefreshResponse> refreshToken(@Valid @RequestBody @Parameter(description = "Данные пользователя") RefreshRequest refreshRequest) {
+        return ResponseEntity.ok(refreshTokenService.generateAccessToken(refreshRequest.getRefresh_token()));
+    }
+
+    @Operation(
+            summary = "Выдача прав администратора",
+            description = "Позволяет выдать пользователю права администратора"
+    )
+    @PostMapping("/setAdmin")
+    public ResponseEntity<User> setAdminForUser(@RequestParam @Min(1) @Parameter(description = "Идентификатор пользователя") int id) {
+        return ResponseEntity.ok(userService.setRoleAdmin(id));
     }
 
     @Operation(
@@ -53,54 +80,11 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Авторизация пользователя",
-            description = "Позволяет аутентифицировать пользователя по логину и паролю"
-    )
-    @GetMapping("/signIn")
-    public ResponseEntity<String> authorizeUser(@RequestParam @Email(message = "login must be email")
-                                              @NotBlank(message = "login is required")
-                                              @Parameter(description = "Логин (электронная почта)", example = "mail@mail.ru")
-                                              String login,
-                                              @RequestParam @Pattern(regexp = "^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}$",
-                                                      message = "password must be at least 8 characters long, contain at least 1 digit, 1 uppercase letter, 1 lowercase letter and 1 special character")
-                                              @NotBlank(message = "password is required")
-                                              @Parameter(description = "Пароль", example = "creativePassword1!")
-                                              String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-        if (authentication.isAuthenticated()){
-            UserDetails userDetails = new UserDetailsImpl(userService.findByLogin(login));
-            return ResponseEntity.ok(jwtService.generateToken(userDetails));
-        } else {
-            throw new UsernameNotFoundException("User is not authorized");
-        }
-    }
-
-    @Operation(
             summary = "Получить всех пользователей"
     )
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
-    }
-
-    @Operation(
-            summary = "Регистрация пользователя",
-            description = "Позволяет зарегистрировать и аутентифицировать нового пользователя"
-    )
-    @PostMapping("/register")
-    public ResponseEntity<String> doRegister(@Valid @RequestBody @Parameter(description = "Данные пользователя") UserRequest new_user) {
-        String token = userService.createToken(new_user);
-        //UserDetails userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return ResponseEntity.ok(token);
-    }
-
-    @Operation(
-            summary = "Выдача прав администратора",
-            description = "Позволяет сделать пользователя админом"
-    )
-    @PostMapping("/setAdmin")
-    public ResponseEntity<User> setAdminForUser(@RequestParam @Min(1) @Parameter(description = "Идентификатор пользователя") int id) {
-        return ResponseEntity.ok(userService.setRoleAdmin(id));
     }
 
     @Operation(
