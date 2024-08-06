@@ -53,6 +53,15 @@ public class UserService {
     }
 
     public User add(UserRequest user) {
+        if (user.getRoles() == null || user.getRoles().length == 0) {
+            user.setRoles(new String[]{Role.ROLE_USER.name()});
+        } else {
+            List<String> roles = new ArrayList<>(Arrays.asList(user.getRoles()));
+            if (!roles.contains(Role.ROLE_USER.name())) {
+                roles.add(Role.ROLE_USER.name());
+            }
+            user.setRoles(roles.toArray(user.getRoles()));
+        }
         return userRepository.save(user);
     }
 
