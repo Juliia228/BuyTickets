@@ -65,7 +65,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public AuthResponse authorise(String login, String password) {
+    public AuthResponse authenticate(String login, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
         if (authentication.isAuthenticated()) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

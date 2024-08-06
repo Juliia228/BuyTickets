@@ -49,7 +49,7 @@ public class UserController {
     )
     @PostMapping("/signIn")
     public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody @Parameter(description = "Данные пользователя для авторизации") AuthRequest request) {
-        return ResponseEntity.ok(userService.authorise(request.getLogin(), request.getPassword()));
+        return ResponseEntity.ok(userService.authenticate(request.getLogin(), request.getPassword()));
     }
 
     @Operation(
