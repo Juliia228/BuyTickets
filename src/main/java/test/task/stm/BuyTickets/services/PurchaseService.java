@@ -25,11 +25,7 @@ public class PurchaseService {
     }
 
     public List<Purchase> findAll() {
-        List<Purchase> purchases = purchaseRepository.getAll();
-        if (purchases.isEmpty()) {
-            throw new DataNotFoundException("0 objects was found");
-        }
-        return purchases;
+        return purchaseRepository.getAll();
     }
 
     public Purchase createPurchase(int ticket_id) throws BadRequestException {

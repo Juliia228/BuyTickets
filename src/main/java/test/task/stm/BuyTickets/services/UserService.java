@@ -49,11 +49,7 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        List<User> users = userRepository.getAll();
-        if (users.isEmpty()) {
-            throw new DataNotFoundException("0 objects was found");
-        }
-        return users;
+        return userRepository.getAll();
     }
 
     public User add(UserRequest user) {

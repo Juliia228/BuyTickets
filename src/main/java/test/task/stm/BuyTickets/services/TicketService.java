@@ -41,11 +41,7 @@ public class TicketService {
     }
 
     public List<Ticket> findAll() {
-        List<Ticket> tickets = ticketRepository.getAll();
-        if (tickets.isEmpty()) {
-            throw new DataNotFoundException("0 objects was found");
-        }
-        return tickets;
+        return ticketRepository.getAll();
     }
 
     public Ticket add(TicketRequest ticket) {

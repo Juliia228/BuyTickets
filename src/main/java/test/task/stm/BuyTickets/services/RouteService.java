@@ -21,11 +21,7 @@ public class RouteService {
     }
 
     public List<Route> findAll() {
-        List<Route> routes = routeRepository.getAll();
-        if (routes.isEmpty()) {
-            throw new DataNotFoundException("0 objects was found");
-        }
-        return routes;
+        return routeRepository.getAll();
     }
 
     public Route add(RouteRequest route) {

@@ -24,11 +24,7 @@ public class TransporterService {
     }
 
     public List<Transporter> findAll()  {
-        List<Transporter> transporters = transporterRepository.getAll();
-        if (transporters.isEmpty()) {
-            throw new DataNotFoundException("0 objects was found");
-        }
-        return transporters;
+        return transporterRepository.getAll();
     }
 
     public Transporter add(Transporter transporter) {
