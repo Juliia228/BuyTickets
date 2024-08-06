@@ -33,7 +33,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleDataAccessException(DataAccessException dataAccessException, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + dataAccessException);
         ErrorResponse errorResponse = new ErrorResponse("Не удалось найти объект", dataAccessException.getMessage());
-        return ResponseEntity.status(404).body(errorResponse);
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -47,7 +47,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> handleDataNotFoundException(DataNotFoundException dataNotFoundException, HttpServletRequest request) {
         log.error(request.getRequestURL() + " raised " + dataNotFoundException);
         ErrorResponse errorResponse = new ErrorResponse("Данные не найдены", dataNotFoundException.getMessage());
-        return ResponseEntity.status(404).body(errorResponse);
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(RegistrationException.class)
