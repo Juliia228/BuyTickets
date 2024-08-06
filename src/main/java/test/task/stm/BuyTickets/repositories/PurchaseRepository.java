@@ -6,6 +6,7 @@ import test.task.stm.BuyTickets.models.request.PurchaseRequest;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public interface PurchaseRepository {
@@ -13,7 +14,7 @@ public interface PurchaseRepository {
             new Purchase(resultSet.getInt("id"),
                     resultSet.getInt("user_id"),
                     resultSet.getInt("ticket_id"),
-                    resultSet.getObject("sold_at", OffsetDateTime.class).plusHours(3));
+                    resultSet.getObject("sold_at", OffsetDateTime.class).atZoneSameInstant(ZoneId.of("Europe/Moscow")));
 
     Purchase get(int id);
 

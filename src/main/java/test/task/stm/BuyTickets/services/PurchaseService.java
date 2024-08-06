@@ -4,12 +4,10 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Purchase;
-import test.task.stm.BuyTickets.models.request.BuyTicketRequest;
 import test.task.stm.BuyTickets.models.request.PurchaseRequest;
 import test.task.stm.BuyTickets.repositories.PurchaseRepository;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -38,7 +36,7 @@ public class PurchaseService {
         if (isTicketSold(ticket_id)) {
             throw new BadRequestException("Ticket with id=" + ticket_id + " is sold");
         }
-        PurchaseRequest purchase = new PurchaseRequest(userService.getCurrentUser().getId(), ticket_id, OffsetDateTime.now(ZoneId.of("UTC+3")));
+        PurchaseRequest purchase = new PurchaseRequest(userService.getCurrentUser().getId(), ticket_id, ZonedDateTime.now());
         return purchaseRepository.save(purchase);
     }
 

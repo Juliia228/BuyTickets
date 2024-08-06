@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +28,5 @@ public class Purchase {
     private int ticket_id;
     @Schema(description = "Дата и время покупки")
     @NotNull
-    private OffsetDateTime sold_at;
+    private ZonedDateTime sold_at;
 }
