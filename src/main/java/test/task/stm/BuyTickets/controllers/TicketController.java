@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Ticket;
 import test.task.stm.BuyTickets.models.User;
-import test.task.stm.BuyTickets.models.request.TicketRequest;
+import test.task.stm.BuyTickets.models.DTO.TicketRequest;
 import test.task.stm.BuyTickets.services.TicketService;
 import test.task.stm.BuyTickets.services.UserService;
 

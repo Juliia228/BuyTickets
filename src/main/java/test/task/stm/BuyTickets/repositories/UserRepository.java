@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.User;
-import test.task.stm.BuyTickets.models.request.UserRequest;
+import test.task.stm.BuyTickets.models.DTO.UserRequest;
 
 import java.sql.ResultSet;
 import java.util.List;

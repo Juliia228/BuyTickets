@@ -9,7 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import test.task.stm.BuyTickets.models.Role;
 import test.task.stm.BuyTickets.models.User;
-import test.task.stm.BuyTickets.models.request.UserRequest;
+import test.task.stm.BuyTickets.models.DTO.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
 import java.sql.*;

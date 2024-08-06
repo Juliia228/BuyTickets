@@ -4,7 +4,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Purchase;
-import test.task.stm.BuyTickets.models.request.PurchaseRequest;
+import test.task.stm.BuyTickets.models.DTO.PurchaseRequest;
 import test.task.stm.BuyTickets.repositories.PurchaseRepository;
 
 import java.time.ZonedDateTime;

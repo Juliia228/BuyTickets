@@ -1,4 +1,4 @@
-package test.task.stm.BuyTickets.models.request;
+package test.task.stm.BuyTickets.models.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

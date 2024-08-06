@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.task.stm.BuyTickets.models.Purchase;
-import test.task.stm.BuyTickets.models.request.BuyTicketRequest;
-import test.task.stm.BuyTickets.models.request.PurchaseRequest;
+import test.task.stm.BuyTickets.models.DTO.PurchaseRequest;
 import test.task.stm.BuyTickets.services.PurchaseService;
 
 import java.util.List;

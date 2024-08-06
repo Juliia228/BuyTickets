@@ -2,7 +2,7 @@ package test.task.stm.BuyTickets.repositories;
 
 import org.springframework.jdbc.core.RowMapper;
 import test.task.stm.BuyTickets.models.Purchase;
-import test.task.stm.BuyTickets.models.request.PurchaseRequest;
+import test.task.stm.BuyTickets.models.DTO.PurchaseRequest;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;

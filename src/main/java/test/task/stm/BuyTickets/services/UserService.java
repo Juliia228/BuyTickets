@@ -5,10 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.exception.RegistrationException;
-import test.task.stm.BuyTickets.models.Role;
-import test.task.stm.BuyTickets.models.User;
-import test.task.stm.BuyTickets.models.UserDetailsImpl;
-import test.task.stm.BuyTickets.models.request.UserRequest;
+import test.task.stm.BuyTickets.models.*;
+import test.task.stm.BuyTickets.models.DTO.AuthResponse;
+import test.task.stm.BuyTickets.models.DTO.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
 
 import java.util.ArrayList;
