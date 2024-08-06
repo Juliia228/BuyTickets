@@ -34,13 +34,11 @@ public class UserController {
 
     @Operation(
             summary = "Регистрация пользователя",
-            description = "Позволяет зарегистрировать и аутентифицировать нового пользователя"
+            description = "Позволяет добавить нового пользователя"
     )
     @PostMapping("/signUp")
-    public ResponseEntity<String> register(@Valid @RequestBody @Parameter(description = "Данные пользователя") UserRequest new_user) {
-        String token = userService.createToken(new_user);
-        //UserDetails userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return ResponseEntity.ok(token);
+    public ResponseEntity<User> register(@Valid @RequestBody @Parameter(description = "Данные пользователя") UserRequest new_user) {
+        return ResponseEntity.ok(userService.register(new_user));
     }
 
     @Operation(

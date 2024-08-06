@@ -69,7 +69,6 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
         if (authentication.isAuthenticated()) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            new UserDetailsImpl(userService.findByLogin(request.getLogin()));
             String jwtToken = jwtService.generateToken(userDetails);
             RefreshToken token = refreshTokenService.createRefreshToken(login);;
             User user = findByLogin(login);
@@ -79,13 +78,12 @@ public class UserService {
         }
     }
 
-    public String createToken(UserRequest new_user) {
+    public User register(UserRequest new_user) {
         if (userRepository.isUserExistByLogin(new_user.getLogin())) {
             throw new RegistrationException("User with login=" + new_user.getLogin() + " already exists");
         }
         new_user.setPassword(passwordEncoder.encode(new_user.getPassword()));
-        User user = userRepository.save(new_user);
-        return jwtService.generateToken(new UserDetailsImpl(user));
+        return add(new_user);
     }
 
     public User setRoleAdmin(int id) {
