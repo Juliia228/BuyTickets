@@ -43,7 +43,7 @@ public class PurchaseRepositoryImpl implements PurchaseRepository {
                             Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, purchase.getUser_id());
             ps.setInt(2, purchase.getTicket_id());
-            ps.setObject(3, purchase.getSold_at());
+            ps.setObject(3, purchase.getSold_at().toOffsetDateTime());
             return ps;
         }, generatedKeyHolder);
         if (generatedKeyHolder.getKeys() == null) {

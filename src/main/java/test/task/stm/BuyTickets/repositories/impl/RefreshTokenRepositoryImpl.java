@@ -48,7 +48,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
                     .prepareStatement("insert into tokens (token, expiration, user_id) values (?, ?, ?)",
                             Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, refreshToken.getToken());
-            ps.setObject(2, refreshToken.getExpiration());
+            ps.setObject(2, refreshToken.getExpiration().toOffsetDateTime());
             ps.setInt(3, refreshToken.getUser_id());
             return ps;
         }, generatedKeyHolder);
