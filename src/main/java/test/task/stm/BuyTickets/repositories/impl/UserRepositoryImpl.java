@@ -7,7 +7,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import test.task.stm.BuyTickets.models.Role;
 import test.task.stm.BuyTickets.models.User;
 import test.task.stm.BuyTickets.models.DTO.UserRequest;
 import test.task.stm.BuyTickets.repositories.UserRepository;
@@ -63,15 +62,7 @@ public class UserRepositoryImpl implements UserRepository {
             ps.setString(3, user.getLast_name());
             ps.setString(4, user.getFirst_name());
             ps.setString(5, user.getPatronymic());
-            if (user.getRoles() == null || user.getRoles().length == 0) {
-                ps.setObject(6, new String[]{Role.ROLE_USER.name()});
-            } else {
-                List<String> roles = new ArrayList<>(Arrays.asList(user.getRoles()));
-                if (!roles.contains(Role.ROLE_USER.name())) {
-                    roles.add(Role.ROLE_USER.name());
-                }
-                ps.setObject(6, roles.toArray(user.getRoles()));
-            }
+            ps.setObject(6, user.getRoles());
             return ps;
         }, generatedKeyHolder);
         if (generatedKeyHolder.getKeys() == null) {
