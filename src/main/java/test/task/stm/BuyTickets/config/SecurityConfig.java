@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import test.task.stm.BuyTickets.models.Role;
 import test.task.stm.BuyTickets.services.UserDetailsServiceImpl;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -50,12 +51,12 @@ public class SecurityConfig {
                 // доступ к конечным точкам в зависимости от роли
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("swagger-ui/**", "swagger-resources/**", "v3/api-docs/**").permitAll()
-                        .requestMatchers("user/register", "user/signIn", "user/refreshToken").permitAll()
-                        .requestMatchers("buyTicket", "ticket/boughtTickets").hasRole("USER")
+                        .requestMatchers("user/signUp", "user/signIn", "user/refreshToken").permitAll()
+                        .requestMatchers("buyTicket", "ticket/boughtTickets").hasRole(Role.ROLE_USER.getRoleName())
                         .requestMatchers("route/getById", "route/getAll",
                                 "ticket/getById", "ticket/available/getAll", "ticket/available/get",
-                                "transporter/getByName", "transporter/getAll").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("purchase/**", "route/**", "ticket/**", "transporter/**", "user/**").hasRole("ADMIN")
+                                "transporter/getByName", "transporter/getAll").hasAnyRole(Role.ROLE_USER.getRoleName(), Role.ROLE_ADMIN.getRoleName())
+                        .requestMatchers("purchase/**", "route/**", "ticket/**", "transporter/**", "user/**").hasRole(Role.ROLE_ADMIN.getRoleName())
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
