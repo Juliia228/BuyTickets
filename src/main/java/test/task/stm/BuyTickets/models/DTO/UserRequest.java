@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Schema(description = "Сущность пользователя для запроса")
 public class UserRequest {
-    @Schema(description = "Логин (электронная почта)", example = "mail@mail.ru")
+    @Schema(description = "Логин (электронная почта)", example = "example@example.example")
     @Email(message = "login must be email")
     @NotBlank(message = "login is required")
     private String login;
@@ -27,6 +27,6 @@ public class UserRequest {
     private String first_name;
     @Schema(description = "Отчество")
     private String patronymic;
-    @Schema(description = "Роли пользователя")
+    @Schema(description = "Роли пользователя", example = "ROLE_USER")
     private String[] roles;
 }

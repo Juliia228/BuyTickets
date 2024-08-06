@@ -16,7 +16,7 @@ public class User {
     @Min(value = 1)
     @NotNull
     private int id;
-    @Schema(description = "Логин (электронная почта)", example = "mail@mail.ru")
+    @Schema(description = "Логин (электронная почта)", example = "example@example.example")
     @Email(message = "login must be email")
     @NotBlank(message = "login is required")
     private String login;
@@ -33,7 +33,7 @@ public class User {
     private String first_name;
     @Schema(description = "Отчество")
     private String patronymic;
-    @Schema(description = "Роли пользователя")
+    @Schema(description = "Роли пользователя", example = "ROLE_USER")
     @NotEmpty(message = "any user must have role")
     private String[] roles;
 }
