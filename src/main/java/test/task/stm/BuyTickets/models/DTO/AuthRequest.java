@@ -18,6 +18,6 @@ public class AuthRequest {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}$",
             message = "password must be at least 8 characters long, contain at least 1 digit, 1 uppercase letter, 1 lowercase letter and 1 special character")
     @NotBlank(message = "password is required")
-    @Schema(description = "Пароль", example = "creativePassword1!")
+    @Schema(description = "Пароль", example = "Example1!")
     private String password;
 }
