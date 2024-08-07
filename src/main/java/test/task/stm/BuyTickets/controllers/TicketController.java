@@ -76,13 +76,13 @@ public class TicketController {
             description = "Позволяет найти доступные для покупки билеты по заданным параметрам (с возможностью пагинации и фильтрации)"
     )
     @GetMapping("/available/get")
-    public ResponseEntity<List<Ticket>> getTicketsByParams(@RequestParam(required = false) @Min(0) Integer offset,
-                                                           @RequestParam(required = false) @Min(1) Integer size,
-                                                           @RequestParam(required = false) @FutureOrPresent Timestamp from,
-                                                           @RequestParam(required = false) @FutureOrPresent Timestamp to,
-                                                           @RequestParam(required = false) @Size(min = 1) String departure_point,
-                                                           @RequestParam(required = false) @Size(min = 1) String destination_point,
-                                                           @RequestParam(required = false) @Size(min = 1) String transporter_name) {
+    public ResponseEntity<List<Ticket>> getTicketsByParams(@RequestParam(required = false) @Min(0) @Parameter(description = "Страница") Integer offset,
+                                                           @RequestParam(required = false) @Min(1) @Parameter(description = "Размер") Integer size,
+                                                           @RequestParam(required = false) @FutureOrPresent @Parameter(description = "Время отправления с") Timestamp from,
+                                                           @RequestParam(required = false) @FutureOrPresent @Parameter(description = "Время отправления до") Timestamp to,
+                                                           @RequestParam(required = false) @Size(min = 1) @Parameter(description = "Пункт отправления") String departure_point,
+                                                           @RequestParam(required = false) @Size(min = 1) @Parameter(description = "Пункт назначения") String destination_point,
+                                                           @RequestParam(required = false) @Size(min = 1) @Parameter(description = "Название перевозчика") String transporter_name) {
         return ResponseEntity.ok(ticketService.find(offset, size, from, to, departure_point, destination_point, transporter_name));
     }
 
