@@ -25,10 +25,6 @@ public interface TicketRepository {
 
     List<Ticket> getAllNotAvailable();
 
-    List<Ticket> getAllAvailable();
-
-    List<Ticket> getAllAvailable(Integer offset, Integer size);
-
     List<Ticket> getAll();
 
     Ticket save(TicketRequest ticket);

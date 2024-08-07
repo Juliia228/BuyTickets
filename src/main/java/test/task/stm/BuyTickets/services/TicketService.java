@@ -34,12 +34,6 @@ public class TicketService {
         return ticketRepository.getAllNotAvailable();
     }
 
-    public List<Ticket> findAllAvailable(Integer offset, Integer size) {
-        return (offset != null && size != null)
-                ? ticketRepository.getAllAvailable(offset, size)
-                : ticketRepository.getAllAvailable();
-    }
-
     public List<Ticket> findAll() {
         return ticketRepository.getAll();
     }

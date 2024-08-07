@@ -72,18 +72,8 @@ public class TicketController {
     }
 
     @Operation(
-            summary = "Получить доступные билеты",
-            description = "Позволяет найти еще не проданные билеты (с возможностью пагинации)"
-    )
-    @GetMapping("/available/getAll")
-    public ResponseEntity<List<Ticket>> getAllAvailableTickets(@RequestParam(required = false) @Min(0) @Parameter(description = "Страница") Integer offset,
-                                                               @RequestParam(required = false) @Min(1) @Parameter(description = "Размер") Integer size) {
-        return ResponseEntity.ok(ticketService.findAllAvailable(offset, size));
-    }
-
-    @Operation(
             summary = "Получить доступные билеты по параметрам фильтрации",
-            description = "Позволяет найти еще не проданные билеты по заданным параметрам (с возможностью пагинации)"
+            description = "Позволяет найти доступные для покупки билеты по заданным параметрам (с возможностью пагинации и фильтрации)"
     )
     @GetMapping("/available/get")
     public ResponseEntity<List<Ticket>> getTicketsByParams(@RequestParam(required = false) @Min(0) Integer offset,

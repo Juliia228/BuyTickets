@@ -74,25 +74,6 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public List<Ticket> getAllAvailable() {
-        return jdbcTemplate.query("select * from tickets " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id",
-                ROW_MAPPER);
-    }
-
-    @Override
-    public List<Ticket> getAllAvailable(Integer offset, Integer size) {
-        return jdbcTemplate.query("select * from tickets " +
-                        "except select tickets.* from tickets " +
-                        "join purchases " +
-                        "on purchases.ticket_id = tickets.id " +
-                        "limit ? offset ?",
-                ROW_MAPPER, size, offset);
-    }
-
-    @Override
     public List<Ticket> getAll() {
         return jdbcTemplate.query("select * from tickets", ROW_MAPPER);
     }

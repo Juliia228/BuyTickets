@@ -53,8 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("swagger-ui/**", "swagger-resources/**", "v3/api-docs/**").permitAll()
                         .requestMatchers("user/signUp", "user/signIn", "user/refreshToken").permitAll()
                         .requestMatchers("buyTicket", "ticket/boughtTickets").hasRole(Role.ROLE_USER.getRoleName())
-                        .requestMatchers("route/getById", "route/getAll",
-                                "ticket/getById", "ticket/available/getAll", "ticket/available/get",
+                        .requestMatchers("route/getById", "route/getAll", "ticket/getById", "ticket/available/get",
                                 "transporter/getByName", "transporter/getAll").hasAnyRole(Role.ROLE_USER.getRoleName(), Role.ROLE_ADMIN.getRoleName())
                         .requestMatchers("purchase/**", "route/**", "ticket/**", "transporter/**", "user/**").hasRole(Role.ROLE_ADMIN.getRoleName())
                         .anyRequest().authenticated())
