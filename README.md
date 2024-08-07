@@ -1,12 +1,12 @@
 # BuyTickets
-### REST API для предоставления возможностей пользователям покупать транспортные билеты
+REST API для предоставления возможностей пользователям покупать транспортные билеты
 
 ## Информация о проекте
 Сервер реализован с помощью `Java, Spring Boot, Spring Security, PostgreSQL, lombok`.
 
 Исходный код находится [тут](https://github.com/Juliia228/BuyTickets/tree/main/src/main/java/test/task/stm/BuyTickets). 
 
-В проект добавлено [тестирование](https://github.com/Juliia228/BuyTickets/tree/main/src/test/java/test/task/stm/BuyTickets). Помимо этого, тестирование осуществлялось с помощью Postman.
+В проект добавлено [тестирование](https://github.com/Juliia228/BuyTickets/tree/main/src/test/java/test/task/stm/BuyTickets). Помимо этого, тестирование осуществлялось с помощью Postman и Swagger UI.
 
 Запуск сервера происходит из файла [BuyTicketsApplication](https://github.com/Juliia228/BuyTickets/blob/main/src/main/java/test/task/stm/BuyTickets/BuyTicketsApplication.java). Сервер запускается локально, порт `9090`.
 Сборка - Maven
