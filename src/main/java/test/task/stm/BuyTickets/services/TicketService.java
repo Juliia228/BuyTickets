@@ -56,6 +56,5 @@ public class TicketService {
         if (ticketRepository.delete(id) == 0) {
             throw new DataNotFoundException("No data was found for deletion");
         }
-        ;
     }
 }

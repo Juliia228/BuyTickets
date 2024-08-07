@@ -35,6 +35,6 @@ public class RouteService {
     public void delete(int id) {
         if (routeRepository.delete(id) == 0) {
             throw new DataNotFoundException("No data was found for deletion");
-        };
+        }
     }
 }

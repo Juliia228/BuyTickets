@@ -51,6 +51,6 @@ public class PurchaseService {
     public void delete(int id) {
         if (purchaseRepository.delete(id) == 0) {
             throw new DataNotFoundException("No data was found for deletion");
-        };
+        }
     }
 }

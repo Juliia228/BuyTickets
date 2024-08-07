@@ -38,6 +38,6 @@ public class TransporterService {
     public void delete(String name) {
         if (transporterRepository.delete(name) == 0) {
             throw new DataNotFoundException("No data was found for deletion");
-        };
+        }
     }
 }
