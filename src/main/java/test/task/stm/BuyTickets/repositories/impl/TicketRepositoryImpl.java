@@ -51,16 +51,16 @@ public class TicketRepositoryImpl implements TicketRepository {
                         ((departure_point != null) ? "AND routes.departure_point LIKE '%" + departure_point + "%' " : "") +
                         ((destination_point != null) ? "AND routes.destination_point LIKE '%" + destination_point + "%' " : "") +
                         ((from != null && to != null)
-                                ? "WHERE departure_at BETWEEN " + departure_point + " AND " + destination_point
+                                ? "WHERE departure_at BETWEEN '" + from + "' AND '" + to + "' "
                                 : ((from != null)
-                                ? " WHERE departure_at >= " + departure_point
-                                : ((to != null)
-                                ? " WHERE departure_at <= " + destination_point
+                                ? "WHERE departure_at >= '" + from + "' "
+                                : (to != null)
+                                ? "WHERE departure_at <= '" + to + "' "
                                 : "")) +
-                                " EXCEPT SELECT tickets.* FROM tickets " +
-                                "JOIN purchases " +
-                                "ON purchases.ticket_id = tickets.id " +
-                                ((offset != null && size != null) ? "LIMIT " + size + " OFFSET " + offset : "")),
+                        "EXCEPT SELECT tickets.* FROM tickets " +
+                        "JOIN purchases " +
+                        "ON purchases.ticket_id = tickets.id " +
+                        ((offset != null && size != null) ? "LIMIT " + size + " OFFSET " + offset : ""),
                 ROW_MAPPER);
     }
 
