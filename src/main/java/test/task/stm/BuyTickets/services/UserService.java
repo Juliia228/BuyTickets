@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.exception.RegistrationException;
 import test.task.stm.BuyTickets.models.*;
@@ -65,6 +66,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public AuthResponse authenticate(String login, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
         if (authentication.isAuthenticated()) {
@@ -78,6 +80,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User register(UserRequest new_user) {
         if (userRepository.isUserExistByLogin(new_user.getLogin())) {
             throw new RegistrationException("User with login=" + new_user.getLogin() + " already exists");

@@ -2,6 +2,7 @@ package test.task.stm.BuyTickets.services;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import test.task.stm.BuyTickets.exception.DataNotFoundException;
 import test.task.stm.BuyTickets.models.Purchase;
 import test.task.stm.BuyTickets.models.DTO.PurchaseRequest;
@@ -28,6 +29,7 @@ public class PurchaseService {
         return purchaseRepository.getAll();
     }
 
+    @Transactional
     public Purchase createPurchase(int ticket_id) throws BadRequestException {
         if (isTicketSold(ticket_id)) {
             throw new BadRequestException("Ticket with id=" + ticket_id + " is sold");
